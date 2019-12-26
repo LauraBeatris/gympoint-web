@@ -4,11 +4,11 @@ import { Switch } from 'react-router-dom';
 // Route Wrapper -> Redirect based in the authentication status of the user
 import Route from './Route';
 
-import SignIn from '../pages/SignIn';
-import Students from '../pages/Students';
-import Registrations from '../pages/Registrations';
-import Plans from '../pages/Plans';
-import HelpOrders from '../pages/HelpOrders';
+import SignIn from '~/pages/SignIn';
+import Students from '~/pages/Students';
+import Registrations from '~/pages/Registrations';
+import Plans from '~/pages/Plans';
+import HelpOrders from '~/pages/HelpOrders';
 
 export default function Routes() {
   return (

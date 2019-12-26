@@ -10,7 +10,7 @@ export default function RouteWrapper({
   isPrivate,
   ...rest
 }) {
-  const signed = true;
+  const signed = false;
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
   }
@@ -19,7 +19,7 @@ export default function RouteWrapper({
     return <Redirect to="/students" />;
   }
 
-  const Layout = signed ? AuthLayout : DefaultLayout;
+  const Layout = signed ? DefaultLayout : AuthLayout;
 
   return (
     <Route
