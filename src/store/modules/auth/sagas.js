@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { css } from 'glamor';
 
 import { signInSuccess, signInFailure } from './actions';
+
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -40,4 +41,19 @@ export function* signIn({ payload }) {
   return history.push('/students');
 }
 
-export default all([takeLatest('@auth/SIGN_IN_REQUEST', signIn)]);
+export function setToken({ payload }) {
+  // First time of the user in the app - Nothing sent to the redux store yet
+  if (!payload) return;
+
+  // Getting the token data from the auth state
+  const { token } = payload.auth;
+  // And then setting the authorization header with the token
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+}
+
+export default all([
+  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('persist/REHYDRATE', setToken),
+]);
