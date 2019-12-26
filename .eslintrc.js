@@ -37,10 +37,9 @@ module.exports = {
   },
   "settings": {
     "import/resolver": {
-      "node": {
-        "paths": ["src"]
-      },
-      "babel-module": {}
+      "babel-plugin-root-import": { 
+        rootPathSuffix: 'src'
+      }
     }
   }
 };
