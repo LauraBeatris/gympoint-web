@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import { fade } from '~/styles/animations';
 
 export const Wrapper = styled.div`
   height: 100%;
@@ -14,7 +15,7 @@ export const Content = styled.div`
   flex-direction: column;
   justify-content: space-around;
 
-  padding: 4rem 3rem;
+  padding: 4.5rem 3rem;
   margin: 1rem;
 
   width: 100%;
@@ -34,8 +35,8 @@ export const Content = styled.div`
     label {
       color: #444;
       font-weight: bold;
-      margin-bottom: 1rem;
       text-transform: uppercase;
+      margin: 2rem 0rem 1rem;
     }
 
     input,
@@ -46,7 +47,6 @@ export const Content = styled.div`
 
     input {
       border: 0.1rem solid #ddd;
-      margin-bottom: 2rem;
       height: 4.4rem;
       padding: 0rem 1.5rem;
 
@@ -63,12 +63,21 @@ export const Content = styled.div`
       border: none;
       padding: 1.3rem 0rem;
       width: 100%;
+      margin-top: 2rem;
 
       transition: background 0.2s;
 
       &:hover {
         background: ${darken(0.1, '#ee4d64')};
       }
+    }
+
+    span {
+      margin-top: 1rem;
+      color: #de3b3b;
+      font-weight: bold;
+      animation: fade;
+      animation: ${fade} 0.5s;
     }
   }
 `;
