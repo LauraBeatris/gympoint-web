@@ -12,7 +12,8 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
-    "reactotron-react-js": "^3.3.7"
+    "reactotron-react-js": "^3.3.7",
+    "styled-components": "^4.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

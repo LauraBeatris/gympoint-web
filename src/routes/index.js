@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
+// Route Wrapper -> Redirect based in the authentication status of the user
 import Route from './Route';
 
 import SignIn from '../pages/SignIn';
