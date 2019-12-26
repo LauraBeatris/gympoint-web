@@ -1,4 +1,6 @@
 import { all, takeLatest, call, put } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
+import { css } from 'glamor';
 
 import { signInSuccess, signInFailure } from './actions';
 import api from '~/services/api';
@@ -17,14 +19,20 @@ export function* signIn({ payload }) {
     user = response.data.user;
   } catch (err) {
     console.tron.log(`ERROR - Authentication failed - ${err.message}`);
+    toast.error('Erro na autenticação. Verifique seus dados', {
+      className: css({
+        background: '#fff !important',
+        color: 'rgb(221, 90, 70) !important',
+      }),
+      bodyClassName: css({
+        fontSize: '16px',
+        fontWeight: 'bold',
+      }),
+      progressClassName: css({
+        background: 'rgb(221, 90, 70) !important',
+      }),
+    });
     return yield put(signInFailure());
-  }
-
-  // Verifying if the variables aren't undefined or null
-  if (!token || !user) {
-    return console.tron.log(
-      `ERROR - Authentication failed - Invalid token and user`
-    );
   }
 
   // Sending the success action with the user data
