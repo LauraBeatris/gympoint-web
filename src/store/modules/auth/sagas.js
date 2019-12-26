@@ -1,6 +1,6 @@
 import { all, takeLatest, call, put } from 'redux-saga/effects';
 
-import { signInSuccess } from './actions';
+import { signInSuccess, signInFailure } from './actions';
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -17,7 +17,7 @@ export function* signIn({ payload }) {
     user = response.data.user;
   } catch (err) {
     console.tron.log(`ERROR - Authentication failed - ${err.message}`);
-    return err;
+    return yield put(signInFailure());
   }
 
   // Verifying if the variables aren't undefined or null
