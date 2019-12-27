@@ -60,12 +60,20 @@ export const Navigation = styled.nav`
       }
     }
 
-    li:first-child {
+    /* li:first-child {
       margin: 0rem 0rem 0 2rem;
     }
 
     li:not(:last-child) a {
       margin: 0rem 1.5rem 0rem 0rem;
+    } */
+
+    li + li {
+      margin-left: 2rem;
+    }
+
+    li:first-child {
+      margin-left: 3rem;
     }
   }
 `;
@@ -78,12 +86,14 @@ export const Profile = styled.aside`
     color: #666;
   }
 
-  a {
+  button {
     display: block;
     color: #de3b3b;
     margin-top: 0.25rem;
     text-transform: lowercase;
     transition: color 0.5s;
+    border: none;
+    background: inherit;
 
     &:hover {
       color: ${darken(0.2, '#de3b3b')};
@@ -104,9 +114,8 @@ export const Menu = styled(Navigation)`
     align-items: flex-start;
     justify-content: center;
 
-    li a {
-      margin: 0rem 1.5rem 0rem 0rem;
-      text-align: center;
+    li:first-child {
+      margin-left: 0;
     }
 
     padding: 1rem 0rem;
