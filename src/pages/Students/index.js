@@ -1,7 +1,17 @@
 import React from 'react';
-import api from '~/services/api';
-// import { Container } from './styles';
+import Action from '~/components/Actions';
+import Button from '~/components/Button';
+import Input from '~/components/Input';
 
-export default function Students() {
-  return <h1> Students </h1>;
+import { Container } from './styles';
+
+export default function StudentsList() {
+  return (
+    <Container>
+      <Action title="Gerenciando alunos">
+        <Button action={() => {}}>Cadastrar</Button>
+        <Input type="text" name="q" placeholder="Buscar aluno" />
+      </Action>
+    </Container>
+  );
 }
