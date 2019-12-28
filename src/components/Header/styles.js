@@ -60,14 +60,6 @@ export const Navigation = styled.nav`
       }
     }
 
-    /* li:first-child {
-      margin: 0rem 0rem 0 2rem;
-    }
-
-    li:not(:last-child) a {
-      margin: 0rem 1.5rem 0rem 0rem;
-    } */
-
     li + li {
       margin-left: 2rem;
     }
@@ -116,6 +108,10 @@ export const Menu = styled(Navigation)`
 
     li:first-child {
       margin-left: 0;
+    }
+
+    li + li {
+      margin-left: 1rem;
     }
 
     padding: 1rem 0rem;

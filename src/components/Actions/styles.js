@@ -28,7 +28,8 @@ export const ActionsContainer = styled.div`
   align-items: center;
 
   button {
-    & + input {
+    & + input,
+    & + div input {
       margin-left: 2rem;
 
       @media (max-width: 102.4rem) {

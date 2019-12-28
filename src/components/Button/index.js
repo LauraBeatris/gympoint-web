@@ -19,6 +19,6 @@ Button.defaultProps = {
 Button.propTypes = {
   background: PropTypes.string,
   color: PropTypes.string,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   action: PropTypes.func.isRequired,
 };

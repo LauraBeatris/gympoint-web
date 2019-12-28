@@ -3,6 +3,16 @@ import { darken } from 'polished';
 
 export const Container = styled.div`
   padding: 0rem 1.2rem;
+
+  @media (max-width: 102.4rem) {
+    padding: 0rem 0.3rem;
+  }
+
+  p.loading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #444;
+  }
 `;
 
 export const StyledTable = styled.table`
