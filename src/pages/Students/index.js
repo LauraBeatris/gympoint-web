@@ -39,7 +39,7 @@ export default function StudentsList() {
   return (
     <Container>
       <Action title="Gerenciando alunos">
-        <Button action={() => {}}>
+        <Button to="/students/register" action={() => {}}>
           <MdAdd color="#fff" /> Cadastrar
         </Button>
         <Input

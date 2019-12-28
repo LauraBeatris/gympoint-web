@@ -10,14 +10,25 @@ import Registrations from '~/pages/Registrations';
 import Plans from '~/pages/Plans';
 import HelpOrders from '~/pages/HelpOrders';
 
+import StudentsRegister from '~/pages/Students/register';
+import RegistrationsRegister from '~/pages/Registrations/register';
+import PlansRegister from '~/pages/Plans/register';
+
 export default function Routes() {
   return (
     <Switch>
       <Route path="/" exact component={SignIn} />
-      <Route path="/students" component={Students} isPrivate />
-      <Route path="/plans" component={Plans} isPrivate />
-      <Route path="/help-orders" component={HelpOrders} isPrivate />
-      <Route path="/registrations" component={Registrations} isPrivate />
+      <Route path="/students" exact component={Students} isPrivate />
+      <Route path="/plans" exact component={Plans} isPrivate />
+      <Route path="/help-orders" exact component={HelpOrders} isPrivate />
+      <Route path="/registrations" exact component={Registrations} isPrivate />
+      <Route path="/students/register" component={StudentsRegister} isPrivate />
+      <Route path="/plans/register" component={PlansRegister} isPrivate />
+      <Route
+        path="/registrations/register"
+        component={RegistrationsRegister}
+        isPrivate
+      />
     </Switch>
   );
 }

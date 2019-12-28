@@ -37,6 +37,10 @@ export const Navigation = styled.nav`
   img {
     padding-right: 3rem;
     border-right: 1px solid #ddd;
+
+    @media (max-width: 102.4rem) {
+      padding-right: 1.5rem;
+    }
   }
 
   ul {

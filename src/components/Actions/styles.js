@@ -27,9 +27,12 @@ export const ActionsContainer = styled.div`
   display: inherit;
   align-items: center;
 
-  button {
+  button,
+  a {
     & + input,
-    & + div input {
+    & + div input,
+    & + button,
+    & + button {
       margin-left: 2rem;
 
       @media (max-width: 102.4rem) {

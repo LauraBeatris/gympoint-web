@@ -50,7 +50,7 @@ export default function RegistrationsList() {
   return (
     <Container>
       <Action title="Gerenciando matrículas">
-        <Button action={() => {}}>
+        <Button to="/registrations/register" action={() => {}}>
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>

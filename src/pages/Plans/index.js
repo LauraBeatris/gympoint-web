@@ -43,7 +43,7 @@ export default function PlansList() {
   return (
     <Container>
       <Action title="Gerenciando planos">
-        <Button action={() => {}}>
+        <Button to="/plans/register" action={() => {}}>
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>
