@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
 import { parseISO, format } from 'date-fns';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -66,6 +67,9 @@ export default function RegistrationsList() {
 
   return (
     <Container>
+      <Helmet>
+        <title> GymPoint | Matrículas </title>
+      </Helmet>
       <Action title="Gerenciando matrículas">
         <Button to="/registrations/register">
           <MdAdd color="#fff" /> Cadastrar

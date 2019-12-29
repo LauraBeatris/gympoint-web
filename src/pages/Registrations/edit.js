@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 import { format, addMonths, parseISO } from 'date-fns';
@@ -132,6 +133,9 @@ export default function RegistrationsEdit({ match }) {
 
   return (
     <Container>
+      <Helmet>
+        <title> GymPoint | Edição de matrícula </title>
+      </Helmet>
       <StyledForm
         initialData={registration}
         schema={schema.edit}

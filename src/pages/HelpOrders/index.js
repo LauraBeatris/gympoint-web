@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
 import Modal from 'react-modal';
 
 import Action from '~/components/Actions';
@@ -65,6 +66,9 @@ export default function HelpOrdersList() {
   return (
     <>
       <Container>
+        <Helmet>
+          <title> GymPoint | Pedidos de auxílio </title>
+        </Helmet>
         <Action title="Pedidos de auxílio" />
         {helpOrders.length > 0 ? (
           <List>
@@ -98,7 +102,12 @@ export default function HelpOrdersList() {
           !loading && <p> Sem pedidos de auxílio no momento </p>
         )}
       </Container>
-      <Modal isOpen={isOpen} onRequestClose={closeModal}>
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+        contentLabel="Pedido de auxílio"
+        ariaHideApp={false}
+      >
         <ModalContent>
           {choosed.question ? (
             <>

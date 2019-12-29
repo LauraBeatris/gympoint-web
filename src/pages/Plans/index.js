@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -61,6 +62,9 @@ export default function PlansList() {
 
   return (
     <Container>
+      <Helmet>
+        <title> Gympoint | Planos </title>
+      </Helmet>
       <Action title="Gerenciando planos">
         <Button to="/plans/register">
           <MdAdd color="#fff" /> Cadastrar

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import Helmet from 'react-helmet';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 import { format, addMonths } from 'date-fns';
 
@@ -83,6 +84,9 @@ export default function RegistrationsRegister() {
 
   return (
     <Container>
+      <Helmet>
+        <title>GymPoint | Cadastro de matrícula</title>
+      </Helmet>
       <StyledForm schema={schema.register} onSubmit={handleSubmit}>
         <Action title="Cadastro de matrícula">
           <Button to="/registrations">

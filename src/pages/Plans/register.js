@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import Helmet from 'react-helmet';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 
 import Action from '~/components/Actions';
@@ -44,6 +45,9 @@ export default function PlansRegister() {
 
   return (
     <Container>
+      <Helmet>
+        <title> GymPoint | Cadastro de plano </title>
+      </Helmet>
       <StyledForm schema={schema.register} onSubmit={handleSubmit}>
         <Action title="Cadastro de plano">
           <Button to="/plans">

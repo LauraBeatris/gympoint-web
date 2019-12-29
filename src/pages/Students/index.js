@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
 import { useSelector } from 'react-redux';
 import { MdAdd, MdSearch } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -59,6 +60,9 @@ export default function StudentsList() {
 
   return (
     <Container>
+      <Helmet>
+        <title> GymPoint | Alunos </title>
+      </Helmet>
       <Action title="Gerenciando alunos">
         <Button to="/students/register">
           <MdAdd color="#fff" /> Cadastrar

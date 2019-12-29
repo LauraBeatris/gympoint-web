@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 
@@ -76,6 +77,9 @@ export default function PlansEdit({ match }) {
 
   return (
     <Container>
+      <Helmet>
+        <title> GymPoint | Edição de plano </title>
+      </Helmet>
       <StyledForm
         initialData={plan}
         schema={schema.register}
