@@ -18,8 +18,11 @@ export function* signIn({ payload }) {
     const response = yield call(api.post, 'sessions', { email, password });
     token = response.data.token;
     user = response.data.user;
+
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+    }
   } catch (err) {
-    console.tron.log(`ERROR - Authentication failed - ${err.message}`);
     toast.error('Erro na autenticação. Verifique seus dados', {
       className: css({
         background: '#fff !important',

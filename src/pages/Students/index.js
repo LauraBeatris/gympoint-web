@@ -23,7 +23,6 @@ export default function StudentsList() {
     async function getStudents() {
       try {
         setLoading(true);
-        console.tron.log(token);
         const response = filter
           ? await api.get('students', {
               params: { q: filter },

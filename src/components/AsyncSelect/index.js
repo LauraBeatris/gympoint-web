@@ -55,7 +55,6 @@ export default function ReactSelect({
             id,
             title,
           }));
-          console.tron.log(data);
           setOptions(data);
         });
       } catch (err) {
