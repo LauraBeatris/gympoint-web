@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { parseISO, format } from 'date-fns';
 import { MdAdd } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import locale from 'date-fns/locale/pt-BR';
 import Action from '~/components/Actions';
@@ -8,6 +9,7 @@ import Button from '~/components/Button';
 import List from '~/components/List';
 
 import api from '~/services/api';
+
 import { Container } from './styles';
 
 export default function RegistrationsList() {
@@ -50,7 +52,7 @@ export default function RegistrationsList() {
   return (
     <Container>
       <Action title="Gerenciando matrículas">
-        <Button to="/registrations/register" action={() => {}}>
+        <Button to="/registrations/register">
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>
@@ -78,10 +80,13 @@ export default function RegistrationsList() {
                 </td>
 
                 <td className="actions">
-                  <button type="button" className="blue">
+                  <Link
+                    to={`/registrations/${registration.id}/edit`}
+                    className="blue"
+                  >
                     {' '}
                     Editar{' '}
-                  </button>
+                  </Link>
                   <button type="button" className="red">
                     {' '}
                     Apagar{' '}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 
 import Action from '~/components/Actions';
@@ -7,39 +7,87 @@ import Input from '~/components/Input';
 import Label from '~/components/Label';
 
 import api from '~/services/api';
-import { StyledForm, Container } from './styles';
+import history from '~/services/history';
+import toast from '~/services/toast';
 
-export default function PLansRegister() {
+import { formatMoney } from '~/util/format';
+
+import { FormContainer, StyledForm, Container } from './styles';
+
+import schema from '~/validators/plans';
+
+export default function PlansRegister() {
+  /* Values to calculate the total price */
+  const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const totalPrice =
+    useMemo(() => formatMoney(Number(duration) * Number(price)), [
+      duration,
+      price,
+    ]) || formatMoney(0);
+
+  async function handleSubmit(data) {
+    try {
+      await api.post('plans', data);
+
+      toast('Plano cadastrado com sucesso', 'success');
+
+      history.push('/plans');
+    } catch (err) {
+      toast('Erro no cadastro de Plano. Verifique os dados', 'error');
+    }
+  }
+
   return (
     <Container>
-      <Action title="Cadastro de plano">
-        <Button to="/plans" action={() => {}}>
-          <MdKeyboardArrowLeft /> Voltar
-        </Button>
-        <Button background="#CCCCCC" action={() => {}}>
-          <MdDone /> Salvar
-        </Button>
-      </Action>
-      <StyledForm>
-        <Label htmlFor="title">TÍTULO DO PLANO</Label>
-        <Input type="text" name="title" id="title" />
-
-        <div>
-          <div>
-            <Label htmlFor="duration">DURAÇÃO (em meses)</Label>
-            <Input type="number" name="duration" id="duration" />
-          </div>
+      <StyledForm schema={schema.register} onSubmit={handleSubmit}>
+        <Action title="Cadastro de plano">
+          <Button to="/plans">
+            <MdKeyboardArrowLeft /> Voltar
+          </Button>
+          <Button type="submit" background="#CCCCCC">
+            <MdDone /> Salvar
+          </Button>
+        </Action>
+        <FormContainer>
+          <Label htmlFor="title">TÍTULO DO PLANO</Label>
+          <Input type="text" name="title" id="title" />
 
           <div>
-            <Label htmlFor="price">PREÇO MENSAL</Label>
-            <Input type="price" name="price" id="price" />
-          </div>
+            <div>
+              <Label htmlFor="duration">DURAÇÃO (em meses)</Label>
+              <Input
+                type="text"
+                name="duration"
+                id="duration"
+                onChange={ev => setDuration(ev.target.value)}
+              />
+            </div>
 
-          <div>
-            <Label htmlFor="total-price">PREÇO TOTAL</Label>
-            <Input type="number" name="total-price" id="total-price" />
+            <div>
+              <Label htmlFor="price">PREÇO MENSAL</Label>
+              <Input
+                type="price"
+                name="price"
+                id="price"
+                onChange={ev => setPrice(ev.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="total_price">PREÇO TOTAL</Label>
+              <Input
+                background="#e0e0e0"
+                readOnly
+                type="text"
+                name="total_price"
+                id="total_price"
+                value={totalPrice}
+              />
+            </div>
           </div>
-        </div>
+        </FormContainer>
       </StyledForm>
     </Container>
   );

@@ -56,7 +56,12 @@ export const StyledTable = styled.table`
       flex-direction: column;
     }
 
-    button {
+    a {
+      text-decoration: none;
+    }
+
+    button,
+    a {
       background: none;
       border: none;
       text-transform: lowercase;

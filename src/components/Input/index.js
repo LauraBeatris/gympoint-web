@@ -7,8 +7,24 @@ export default function Input({
   type,
   name,
   placeholder,
+  readOnly,
   icon: Icon,
+  background,
+  value,
 }) {
+  if (typeof value === 'number' || value)
+    return (
+      <StyledInput
+        onChange={onChange}
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        readOnly={readOnly}
+        background={background}
+        value={value}
+      />
+    );
+
   return (
     <>
       {!Icon ? (
@@ -17,6 +33,8 @@ export default function Input({
           type={type}
           name={name}
           placeholder={placeholder}
+          readOnly={readOnly}
+          background={background}
         />
       ) : (
         <InputWrapper>
@@ -26,6 +44,7 @@ export default function Input({
             type={type}
             name={name}
             placeholder={placeholder}
+            background={background}
           />
         </InputWrapper>
       )}
@@ -37,6 +56,9 @@ Input.defaultProps = {
   onChange: () => {},
   placeholder: '',
   icon: null,
+  readOnly: false,
+  background: '#FFFF',
+  value: null,
 };
 
 Input.propTypes = {
@@ -45,4 +67,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  readOnly: PropTypes.bool,
+  background: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

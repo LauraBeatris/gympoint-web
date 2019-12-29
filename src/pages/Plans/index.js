@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import List from '~/components/List';
@@ -43,7 +45,7 @@ export default function PlansList() {
   return (
     <Container>
       <Action title="Gerenciando planos">
-        <Button to="/plans/register" action={() => {}}>
+        <Button to="/plans/register">
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>
@@ -64,10 +66,10 @@ export default function PlansList() {
                 <td className="center">{plan.formattedDuration}</td>
                 <td className="center">{plan.formattedPrice}</td>
                 <td className="actions">
-                  <button type="button" className="blue">
+                  <Link to={`/plans/${plan.id}/edit`} className="blue">
                     {' '}
                     Editar{' '}
-                  </button>
+                  </Link>
                   <button type="button" className="red">
                     {' '}
                     Apagar{' '}

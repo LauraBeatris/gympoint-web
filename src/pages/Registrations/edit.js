@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
-import { format, addMonths } from 'date-fns';
+import { format, addMonths, parseISO } from 'date-fns';
 
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
@@ -17,65 +18,68 @@ import { formatMoney } from '~/util/format';
 
 import { FormContainer, StyledForm, Container, StyledSelect } from './styles';
 
-import schema from '~/validators/registration';
+import schema from '~/validators/student';
 
-export default function RegistrationsRegister() {
-  const [plans, setPlans] = useState([]);
-
-  /* To calculate the final price */
-  const [plan, setPlan] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
-
-  // Getting the plans data for the select component
-  useEffect(() => {
-    async function getPlans() {
-      try {
-        const response = await api.get('plans');
-        const data = response.data.map(({ id, title, duration, price }) => ({
-          id: JSON.stringify({ duration, price, id }),
-          title,
-        }));
-        setPlans(data);
-      } catch (err) {
-        toast('Erro no carregamento dos planos.', 'error');
-      }
-    }
-
-    getPlans();
-  }, []);
-
-  // Calculating the final price
-  const finalPrice =
-    useMemo(() => {
-      if (plan) return formatMoney(plan.duration * plan.price);
-      return null;
-    }, [plan]) || formatMoney(0);
+export default function StudentsEdit({ match }) {
+  const { params } = match;
+  const { registration_id } = params;
+  const [registration, setRegistration] = useState({
+    plan: { id: '', name: '', duration: 1, price: '' },
+    student: { id: '', name: '' },
+    start_date: '',
+    end_date: '',
+    price: 0,
+  });
 
   const formattedEndDate = useMemo(() => {
-    if (plan) {
-      return format(addMonths(startDate, plan.duration), "dd'/'MM'/'yyyy");
+    console.tron.log(registration.start_date);
+
+    if (registration.start_date && registration.plan.duration) {
+      return format(
+        addMonths(
+          parseISO(registration.start_date),
+          registration.plan.duration
+        ),
+        "dd'/'MM'/'yyyy"
+      );
     }
     return null;
-  }, [plan, startDate]);
+  }, [registration.plan.duration, registration.start_date]);
+
+  // Loading student data
+  useEffect(() => {
+    async function getRegistration() {
+      try {
+        const response = await api
+          .get(`registrations/${registration_id}`)
+          .then(res => setRegistration(res.data));
+        return response;
+      } catch (err) {
+        return toast(
+          'Falha ao procurar os dados da matrícula. Verifique os dados novamente',
+          'error'
+        );
+      }
+    }
+
+    getRegistration();
+  }, [registration_id]);
 
   async function handleSubmit(data) {
-    data.start_date = new Date(data.start_date).toISOString();
-    data.plan_id = JSON.parse(data.plan_id).id;
-
     try {
-      await api.post('registrations', data);
+      await api
+        .put(`registrations/${registration_id}`, data)
+        .then(res => setRegistration(res.data));
 
-      toast('Aluno matrículado com sucesso', 'success');
+      toast('Matrícula atualizada com sucesso', 'success');
 
-      return history.push('/registrations');
+      return history.push('/students');
     } catch (err) {
-      const { contentMessage } = JSON.parse(err.response.data.error.message);
-      if (contentMessage) {
-        return toast(contentMessage, 'error');
+      if (err.response.data) {
+        return toast(err.response.data.messageContent, 'error');
       }
-
       return toast(
-        'Erro no cadastro da matrícula. Verifique os dados',
+        'Erro na atualização da matrícula. Verifique os dados',
         'error'
       );
     }
@@ -84,7 +88,7 @@ export default function RegistrationsRegister() {
   return (
     <Container>
       <StyledForm schema={schema.register} onSubmit={handleSubmit}>
-        <Action title="Cadastro de matrícula">
+        <Action title="Edição de matrícula">
           <Button to="/registrations">
             <MdKeyboardArrowLeft /> Voltar
           </Button>
@@ -100,6 +104,7 @@ export default function RegistrationsRegister() {
             placeholder="Buscar aluno"
             loadOptionsEndpoint="/students"
             loadOptionsError="Erro no carregamento dos estudantes"
+            value={registration.student_id}
           />
 
           <div className="grid">
@@ -109,8 +114,9 @@ export default function RegistrationsRegister() {
                 name="plan_id"
                 id="plan_id"
                 placeholder="Selecione um plano"
-                options={plans}
-                onChange={e => setPlan(JSON.parse(e.target.value))}
+                options={[]}
+                value={registration.plan_id}
+                // onChange={e => setPlan(JSON.parse(e.target.value))}
               />
             </div>
 
@@ -120,8 +126,9 @@ export default function RegistrationsRegister() {
                 name="start_date"
                 id="start_date"
                 placeholder="Selecione uma data de início"
-                minDate={startDate}
-                onChange={date => setStartDate(date)}
+                // minDate={startDate}
+                // onChange={date => setStartDate(date)}
+                value={registration.start_date}
               />
             </div>
 
@@ -145,7 +152,7 @@ export default function RegistrationsRegister() {
                 type="text"
                 name="price"
                 id="price"
-                value={finalPrice}
+                value={registration.final_price}
               />
             </div>
           </div>
@@ -154,3 +161,9 @@ export default function RegistrationsRegister() {
     </Container>
   );
 }
+
+StudentsEdit.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape(),
+  }).isRequired,
+};

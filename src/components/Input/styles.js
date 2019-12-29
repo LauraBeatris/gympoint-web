@@ -4,6 +4,7 @@ import { Input } from '@rocketseat/unform';
 export const StyledInput = styled(Input)`
   border: 1px solid #ddd;
   border-radius: 0.4rem;
+  background: ${props => props.background};
 
   color: #999;
   font-size: 1.4rem;

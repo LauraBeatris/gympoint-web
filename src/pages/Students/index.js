@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdAdd, MdSearch } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
@@ -39,7 +40,7 @@ export default function StudentsList() {
   return (
     <Container>
       <Action title="Gerenciando alunos">
-        <Button to="/students/register" action={() => {}}>
+        <Button to="/students/register">
           <MdAdd color="#fff" /> Cadastrar
         </Button>
         <Input
@@ -67,10 +68,10 @@ export default function StudentsList() {
                 <td>{student.email}</td>
                 <td className="center">{student.age}</td>
                 <td className="actions">
-                  <button type="button" className="blue">
+                  <Link to={`/students/${student.id}/edit`} className="blue">
                     {' '}
                     Editar{' '}
-                  </button>
+                  </Link>
                   <button type="button" className="red">
                     {' '}
                     Apagar{' '}
