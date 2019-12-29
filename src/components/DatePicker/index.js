@@ -29,7 +29,7 @@ export default function DatePicker({
     return (
       <StyledDatePicker
         name={fieldName}
-        selected={selected || minDate}
+        selected={value || selected || minDate}
         onChange={date => {
           onChange(date);
           setSelected(date);
@@ -39,7 +39,6 @@ export default function DatePicker({
         todayButton="Hoje"
         placeholderText={placeholder}
         minDate={minDate}
-        value={value}
       />
     );
 

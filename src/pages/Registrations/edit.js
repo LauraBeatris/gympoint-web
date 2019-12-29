@@ -18,76 +18,126 @@ import { formatMoney } from '~/util/format';
 
 import { FormContainer, StyledForm, Container, StyledSelect } from './styles';
 
-import schema from '~/validators/student';
+import schema from '~/validators/registration';
 
-export default function StudentsEdit({ match }) {
+export default function RegistrationsEdit({ match }) {
   const { params } = match;
   const { registration_id } = params;
-  const [registration, setRegistration] = useState({
-    plan: { id: '', name: '', duration: 1, price: '' },
-    student: { id: '', name: '' },
-    start_date: '',
-    end_date: '',
-    price: 0,
-  });
 
-  const formattedEndDate = useMemo(() => {
-    console.tron.log(registration.start_date);
+  /* Initial data */
+  const [registration, setRegistration] = useState({});
 
-    if (registration.start_date && registration.plan.duration) {
-      return format(
-        addMonths(
-          parseISO(registration.start_date),
-          registration.plan.duration
-        ),
-        "dd'/'MM'/'yyyy"
-      );
-    }
-    return null;
-  }, [registration.plan.duration, registration.start_date]);
+  /* To calculate the final price */
+  const [plan, setPlan] = useState({});
+  const [startDate, setStartDate] = useState(new Date());
 
-  // Loading student data
+  /* Plans options for the select component */
+  const [plans, setPlans] = useState([]);
+
+  /* Getting the plan initial data */
   useEffect(() => {
     async function getRegistration() {
       try {
-        const response = await api
-          .get(`registrations/${registration_id}`)
-          .then(res => setRegistration(res.data));
-        return response;
+        const response = await api.get(`registrations/${registration_id}`);
+
+        setPlan({
+          duration: response.data.plan.duration,
+          price: response.data.plan.price,
+          id: response.data.plan.id,
+        });
+
+        setStartDate(new Date(response.data.start_date));
+
+        return setRegistration({
+          ...response.data,
+          student_id: response.data.student.id,
+          student: response.data.student.name,
+        });
       } catch (err) {
-        return toast(
-          'Falha ao procurar os dados da matrícula. Verifique os dados novamente',
-          'error'
-        );
+        const { contentMessage } = JSON.parse(err.response.data.error.message);
+        if (contentMessage) {
+          return toast(contentMessage, 'error');
+        }
+
+        return toast('Erro ao carregar os dados da matrícula.', 'error');
       }
     }
 
     getRegistration();
   }, [registration_id]);
 
-  async function handleSubmit(data) {
-    try {
-      await api
-        .put(`registrations/${registration_id}`, data)
-        .then(res => setRegistration(res.data));
-
-      toast('Matrícula atualizada com sucesso', 'success');
-
-      return history.push('/students');
-    } catch (err) {
-      if (err.response.data) {
-        return toast(err.response.data.messageContent, 'error');
+  // Getting the plans data for the select component
+  useEffect(() => {
+    async function getPlans() {
+      try {
+        const response = await api.get('plans');
+        const data = response.data.map(({ id, title, duration, price }) => ({
+          id: JSON.stringify({ duration, price, id }),
+          title,
+        }));
+        setPlans(data);
+      } catch (err) {
+        toast('Erro no carregamento dos planos.', 'error');
       }
+    }
+
+    getPlans();
+  }, []);
+
+  // Calculating the final price
+  const finalPrice =
+    useMemo(() => {
+      if (plan) return formatMoney(plan.duration * plan.price || 0);
+      return null;
+    }, [plan]) || formatMoney(0);
+
+  const formattedEndDate = useMemo(() => {
+    if (plan && plan.duration) {
+      return format(addMonths(startDate, plan.duration), "dd'/'MM'/'yyyy");
+    }
+    if (registration.end_date) {
+      return format(parseISO(registration.end_date), "dd'/'MM'/'yyyy");
+    }
+    return null;
+  }, [plan, registration.end_date, startDate]);
+
+  async function handleSubmit(data) {
+    const start_date = new Date(data.start_date).toISOString();
+    const plan_id = plan.id;
+    const { student_id } = registration;
+
+    try {
+      await api.put(`registrations/${registration_id}`, {
+        start_date,
+        plan_id,
+        student_id,
+      });
+
+      toast('Matrícula atualizado com sucesso', 'success');
+
+      return history.push('/registrations');
+    } catch (err) {
+      const { contentMessage } = JSON.parse(err.response.data.error.message);
+      if (contentMessage) {
+        return toast(contentMessage, 'error');
+      }
+
       return toast(
-        'Erro na atualização da matrícula. Verifique os dados',
+        'Erro no cadastro da matrícula. Verifique os dados',
         'error'
       );
     }
   }
 
+  const todayDate = useMemo(() => new Date(), []);
+
   return (
     <Container>
-      <StyledForm schema={schema.register} onSubmit={handleSubmit}>
+      <StyledForm
+        initialData={registration}
+        schema={schema.edit}
+        onSubmit={handleSubmit}
+      >
         <Action title="Edição de matrícula">
           <Button to="/registrations">
             <MdKeyboardArrowLeft /> Voltar
@@ -98,14 +148,7 @@ export default function StudentsEdit({ match }) {
         </Action>
         <FormContainer>
           <Label htmlFor="student_id">ALUNO</Label>
-          <AsyncSelect
-            name="student_id"
-            id="student_id"
-            placeholder="Buscar aluno"
-            loadOptionsEndpoint="/students"
-            loadOptionsError="Erro no carregamento dos estudantes"
-            value={registration.student_id}
-          />
+          <Input type="text" name="student" id="student" readOnly />
 
           <div className="grid">
             <div>
@@ -114,9 +157,9 @@ export default function StudentsEdit({ match }) {
                 name="plan_id"
                 id="plan_id"
                 placeholder="Selecione um plano"
-                options={[]}
-                value={registration.plan_id}
-                // onChange={e => setPlan(JSON.parse(e.target.value))}
+                options={plans}
+                value={JSON.stringify(plan)}
+                onChange={e => setPlan(JSON.parse(e.target.value))}
               />
             </div>
 
@@ -126,9 +169,9 @@ export default function StudentsEdit({ match }) {
                 name="start_date"
                 id="start_date"
                 placeholder="Selecione uma data de início"
-                // minDate={startDate}
-                // onChange={date => setStartDate(date)}
-                value={registration.start_date}
+                minDate={todayDate}
+                value={startDate}
+                onChange={date => setStartDate(date)}
               />
             </div>
 
@@ -152,7 +195,7 @@ export default function StudentsEdit({ match }) {
                 type="text"
                 name="price"
                 id="price"
-                value={registration.final_price}
+                value={finalPrice}
               />
             </div>
           </div>
@@ -162,8 +205,8 @@ export default function StudentsEdit({ match }) {
   );
 }
 
-StudentsEdit.propTypes = {
+RegistrationsEdit.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.shape(),
+    params: PropTypes.shape({ registration_id: PropTypes.string }),
   }).isRequired,
 };

@@ -20,13 +20,10 @@ export default function StudentsRegister() {
 
       toast('Aluno cadastrado com sucesso', 'success');
 
-      history.push('/students');
+      return history.push('/students');
     } catch (err) {
-      if (err.config.data) {
-        return toast(
-          'Um aluno com esse email já esta cadastrado. Verifique os dados novamente',
-          'error'
-        );
+      if (err.response.data) {
+        return toast(err.response.data.messageContent, 'error');
       }
       return toast('Erro no cadastro de aluno. Verifique os dados', 'error');
     }
@@ -39,7 +36,7 @@ export default function StudentsRegister() {
           <Button to="/students">
             <MdKeyboardArrowLeft /> Voltar
           </Button>
-          <Button type="submit" type="submit" background="#CCCCCC">
+          <Button type="submit" background="#CCCCCC">
             <MdDone /> Salvar
           </Button>
         </Action>

@@ -63,7 +63,11 @@ export default function StudentsEdit({ match }) {
 
   return (
     <Container>
-      <StyledForm schema={schema.edit} onSubmit={handleSubmit}>
+      <StyledForm
+        initialData={student}
+        schema={schema.edit}
+        onSubmit={handleSubmit}
+      >
         <Action title="Edição de aluno">
           <Button to="/students">
             <MdKeyboardArrowLeft /> Voltar
@@ -79,7 +83,6 @@ export default function StudentsEdit({ match }) {
             name="name"
             id="name"
             placeholder="John Joe"
-            value={student && student.name}
             onChange={e => setStudent({ ...student, name: e.target.value })}
           />
 
@@ -89,7 +92,6 @@ export default function StudentsEdit({ match }) {
             name="email"
             id="email"
             placeholder="exemplo@gmail.com"
-            value={student && student.email}
             onChange={e => setStudent({ ...student, email: e.target.value })}
           />
 
@@ -100,7 +102,6 @@ export default function StudentsEdit({ match }) {
                 type="text"
                 name="age"
                 id="age"
-                value={student && student.age}
                 onChange={e => setStudent({ ...student, age: e.target.value })}
               />
             </div>
@@ -111,7 +112,6 @@ export default function StudentsEdit({ match }) {
                 type="text"
                 name="weight"
                 id="weight"
-                value={student && student.weight}
                 onChange={e =>
                   setStudent({ ...student, weight: e.target.value })
                 }
@@ -124,7 +124,6 @@ export default function StudentsEdit({ match }) {
                 type="text"
                 name="height"
                 id="height"
-                value={student && student.height}
                 onChange={e =>
                   setStudent({ ...student, height: e.target.value })
                 }
