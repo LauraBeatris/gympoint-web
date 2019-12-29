@@ -8,27 +8,26 @@ import Input from '~/components/Input';
 import List from '~/components/List';
 
 import api from '~/services/api';
+import toast from '~/services/toast';
 import { Container } from './styles';
 
 export default function StudentsList() {
   const [students, setStudents] = useState([]);
   const [filter, setFilter] = useState('');
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getStudents() {
       try {
         setLoading(true);
-        setError(false);
 
         const response = filter
           ? await api.get('students', { params: { q: filter } })
           : await api.get('students');
 
-        setStudents(response.data);
+        return setStudents(response.data);
       } catch (err) {
-        setError(true);
+        return toast('Erro na listagem de aluno.', 'error');
       } finally {
         setLoading(false);
       }
@@ -36,6 +35,22 @@ export default function StudentsList() {
 
     getStudents();
   }, [filter]);
+
+  async function handleDelete(id) {
+    try {
+      await api.delete(`/students/${id}`);
+      toast('Aluno deletado com sucesso', 'success');
+
+      return setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+    } catch (err) {
+      if (err.response.data) {
+        return toast(err.response.data.messageContent, 'error');
+      }
+      return toast('Erro na deleção do aluno.', 'error');
+    }
+  }
 
   return (
     <Container>
@@ -68,14 +83,20 @@ export default function StudentsList() {
                 <td>{student.email}</td>
                 <td className="center">{student.age}</td>
                 <td className="actions">
-                  <Link to={`/students/${student.id}/edit`} className="blue">
-                    {' '}
-                    Editar{' '}
-                  </Link>
-                  <button type="button" className="red">
-                    {' '}
-                    Apagar{' '}
-                  </button>
+                  <div>
+                    <Link to={`/students/${student.id}/edit`} className="blue">
+                      {' '}
+                      Editar{' '}
+                    </Link>
+                    <button
+                      type="button"
+                      className="red"
+                      onClick={() => handleDelete(student.id)}
+                    >
+                      {' '}
+                      Apagar{' '}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

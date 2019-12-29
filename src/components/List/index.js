@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container, StyledTable } from './styles';
+import { Container, StyledTable, TableWrapper } from './styles';
 
 export default function List({ children, loading }) {
   return (
     <Container>
       {!loading ? (
-        <StyledTable>{children}</StyledTable>
+        <TableWrapper>
+          <StyledTable>{children}</StyledTable>
+        </TableWrapper>
       ) : (
         <p className="loading">Carregando...</p>
       )}

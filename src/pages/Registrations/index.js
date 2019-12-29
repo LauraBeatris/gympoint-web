@@ -9,19 +9,18 @@ import Button from '~/components/Button';
 import List from '~/components/List';
 
 import api from '~/services/api';
+import toast from '~/services/toast';
 
 import { Container } from './styles';
 
 export default function RegistrationsList() {
   const [registrations, setRegistrations] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getRegistrations() {
       try {
         setLoading(true);
-        setError(false);
 
         const response = await api.get('registrations');
         const data = response.data.map(registration => ({
@@ -38,9 +37,9 @@ export default function RegistrationsList() {
           ),
         }));
 
-        setRegistrations(data);
+        return setRegistrations(data);
       } catch (err) {
-        setError(true);
+        return toast('Erro na listagem de matrículas.', 'error');
       } finally {
         setLoading(false);
       }
@@ -48,6 +47,22 @@ export default function RegistrationsList() {
 
     getRegistrations();
   }, []);
+
+  async function handleDelete(id) {
+    try {
+      await api.delete(`/registrations/${id}`);
+      toast('Matrícula deletada com sucesso', 'success');
+
+      return setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+    } catch (err) {
+      if (err.response.data) {
+        return toast(err.response.data.messageContent, 'error');
+      }
+      return toast('Erro na deleção da matrícula.', 'error');
+    }
+  }
 
   return (
     <Container>
@@ -80,17 +95,23 @@ export default function RegistrationsList() {
                 </td>
 
                 <td className="actions">
-                  <Link
-                    to={`/registrations/${registration.id}/edit`}
-                    className="blue"
-                  >
-                    {' '}
-                    Editar{' '}
-                  </Link>
-                  <button type="button" className="red">
-                    {' '}
-                    Apagar{' '}
-                  </button>
+                  <div>
+                    <Link
+                      to={`/registrations/${registration.id}/edit`}
+                      className="blue"
+                    >
+                      {' '}
+                      Editar{' '}
+                    </Link>
+                    <button
+                      type="button"
+                      className="red"
+                      onClick={() => handleDelete(registration.id)}
+                    >
+                      {' '}
+                      Apagar{' '}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

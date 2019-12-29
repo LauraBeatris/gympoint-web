@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
+
 import Action from '~/components/Actions';
 import List from '~/components/List';
+import Input from '~/components/Input';
 
 import api from '~/services/api';
-import { Container } from './styles';
+import toast from '~/services/toast';
+import { Container, ModalContent, StyledForm } from './styles';
 
 export default function HelpOrdersList() {
   const [helpOrders, setHelpOrders] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+
+  const [choosed, setChoosed] = useState({});
 
   useEffect(() => {
     async function getHelpOrders() {
       try {
         setLoading(true);
-        setError(false);
 
         const response = await api.get('help-orders/pending');
 
         setHelpOrders(response.data);
       } catch (err) {
-        setError(true);
+        toast('Erro na listagem de pedidos de ajuda.', 'error');
       } finally {
         setLoading(false);
       }
@@ -29,34 +34,94 @@ export default function HelpOrdersList() {
     getHelpOrders();
   }, []);
 
+  function openModal(helpOrderId, helpOrderQuestion) {
+    setChoosed({ id: helpOrderId, question: helpOrderQuestion });
+    return setOpen(true);
+  }
+
+  function closeModal() {
+    return setOpen(false);
+  }
+
+  async function sendAnswer(data) {
+    try {
+      await api.post(`help-orders/${choosed.id}/answer`, data);
+
+      toast('Pedido de ajuda respondido com sucesso', 'success');
+      return setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+    } catch (err) {
+      if (err.response.data.messageContent) {
+        return toast(err.response.data.messageContent, 'error');
+      }
+      return toast(
+        'Erro ao responder pedido de ajuda. Verifique os dados',
+        'error'
+      );
+    }
+  }
+
   return (
-    <Container>
-      <Action title="Pedidos de auxílio" />
-      {helpOrders.length > 0 ? (
-        <List>
-          <thead>
-            <tr>
-              <th> Aluno </th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {helpOrders.map(helpOrder => (
-              <tr key={helpOrder.id}>
-                <td>{helpOrder.student.name}</td>
-                <td className="actions">
-                  <button type="button" className="blue">
-                    {' '}
-                    Responder{' '}
-                  </button>
-                </td>
+    <>
+      <Container>
+        <Action title="Pedidos de auxílio" />
+        {helpOrders.length > 0 ? (
+          <List>
+            <thead>
+              <tr>
+                <th> Aluno </th>
+                <th />
               </tr>
-            ))}
-          </tbody>
-        </List>
-      ) : (
-        !loading && <p> Sem pedidos de auxílio no momento </p>
-      )}
-    </Container>
+            </thead>
+            <tbody>
+              {helpOrders.map(helpOrder => (
+                <tr key={helpOrder.id}>
+                  <td>{helpOrder.student.name}</td>
+                  <td className="actions">
+                    <button
+                      type="button"
+                      className="blue"
+                      onClick={() =>
+                        openModal(helpOrder.id, helpOrder.question)
+                      }
+                    >
+                      {' '}
+                      Responder{' '}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </List>
+        ) : (
+          !loading && <p> Sem pedidos de auxílio no momento </p>
+        )}
+      </Container>
+      <Modal isOpen={isOpen} onRequestClose={closeModal}>
+        <ModalContent>
+          {choosed.question ? (
+            <>
+              <div className="question-container">
+                <h2> Pergunta do Aluno </h2>
+                <p className="question">{choosed.question}</p>
+              </div>
+              <StyledForm onSubmit={sendAnswer} className="answer-form">
+                <h2> Sua resposta </h2>
+                <Input
+                  id="answer"
+                  name="answer"
+                  placeholder="Resposta"
+                  multiline
+                />
+                <button type="submit">Responder aluno</button>
+              </StyledForm>{' '}
+            </>
+          ) : (
+            <p> Carregando... </p>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

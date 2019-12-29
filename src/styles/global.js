@@ -24,7 +24,7 @@ export default createGlobalStyle`
         height: 100%; 
     }
 
-    body { 
+    body, textarea { 
         -webkit-font-smoothing: antialiased; 
         font: 1.4rem 'Roboto', sans-serif;
     }
@@ -39,5 +39,24 @@ export default createGlobalStyle`
 
     button { 
         cursor: pointer;
+    }
+
+    /* Override react modal default style */
+    .ReactModal__Overlay { 
+        background-color: rgba(0, 0, 0, .7) !important;
+    }
+
+    .ReactModal__Content { 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center;
+        border: none !important;
+        width: auto;
+        height: 35rem;       
+        margin: auto;
+
+        @media (min-width: 1000px){
+            width: 40rem;
+        }
     }
 `;

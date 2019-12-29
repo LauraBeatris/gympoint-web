@@ -114,6 +114,11 @@ export const Menu = styled(Navigation)`
       margin-left: 0;
     }
 
+    li {
+      width: 100%;
+      text-align: center;
+    }
+
     li + li {
       margin-left: 1rem;
     }

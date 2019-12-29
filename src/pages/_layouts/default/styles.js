@@ -3,7 +3,7 @@ import { fade } from '~/styles/animations';
 
 export const Wrapper = styled.div`
   height: 100%;
-  background: #fff;
+  background: #f5f5f5;
 `;
 
 export const Content = styled.div`

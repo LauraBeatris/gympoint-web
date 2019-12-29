@@ -17,6 +17,12 @@ const StyledSelect = styled(Select)`
   &::placeholder {
     color: #999999;
   }
+
+  div {
+    @media (max-width: 1440px) {
+      width: 100%;
+    }
+  }
 `;
 
 export default StyledSelect;

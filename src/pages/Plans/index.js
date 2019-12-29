@@ -7,19 +7,19 @@ import Button from '~/components/Button';
 import List from '~/components/List';
 
 import api from '~/services/api';
+import toast from '~/services/toast';
+
 import { formatMoney } from '~/util/format';
 import { Container } from './styles';
 
 export default function PlansList() {
   const [plans, setPlans] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getPlans() {
       try {
         setLoading(true);
-        setError(false);
 
         const response = await api.get('plans');
 
@@ -32,9 +32,9 @@ export default function PlansList() {
               : `${plan.duration} mês`,
         }));
 
-        setPlans(data);
+        return setPlans(data);
       } catch (err) {
-        setError(true);
+        return toast('Erro na listagem de planos.', 'error');
       } finally {
         setLoading(false);
       }
@@ -42,6 +42,23 @@ export default function PlansList() {
 
     getPlans();
   }, []);
+
+  async function handleDelete(id) {
+    try {
+      await api.delete(`plans/${id}`);
+      toast('Plano deletado com sucesso', 'success');
+
+      return setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+    } catch (err) {
+      if (err.response.data.messageContent) {
+        return toast(err.response.data.messageContent, 'error');
+      }
+      return toast('Erro na deleção do plano.', 'error');
+    }
+  }
+
   return (
     <Container>
       <Action title="Gerenciando planos">
@@ -66,14 +83,20 @@ export default function PlansList() {
                 <td className="center">{plan.formattedDuration}</td>
                 <td className="center">{plan.formattedPrice}</td>
                 <td className="actions">
-                  <Link to={`/plans/${plan.id}/edit`} className="blue">
-                    {' '}
-                    Editar{' '}
-                  </Link>
-                  <button type="button" className="red">
-                    {' '}
-                    Apagar{' '}
-                  </button>
+                  <div>
+                    <Link to={`/plans/${plan.id}/edit`} className="blue">
+                      {' '}
+                      Editar{' '}
+                    </Link>
+                    <button
+                      type="button"
+                      className="red"
+                      onClick={() => handleDelete(plan.id)}
+                    >
+                      {' '}
+                      Apagar{' '}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

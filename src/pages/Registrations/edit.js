@@ -7,7 +7,6 @@ import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
 import Label from '~/components/Label';
-import AsyncSelect from '~/components/AsyncSelect';
 import DatePicker from '~/components/DatePicker';
 
 import api from '~/services/api';

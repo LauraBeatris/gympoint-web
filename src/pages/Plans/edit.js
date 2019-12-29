@@ -65,9 +65,12 @@ export default function PlansEdit({ match }) {
 
       toast('Plano editado com sucesso', 'success');
 
-      history.push('/plans');
+      return history.push('/plans');
     } catch (err) {
-      toast('Erro na edição do plano. Verifique os dados', 'error');
+      if (err.response.data.messageContent) {
+        return toast(err.response.data.messageContent, 'error');
+      }
+      return toast('Erro na edição do plano. Verifique os dados', 'error');
     }
   }
 

@@ -4,24 +4,24 @@ import { StyledInput, InputWrapper } from './styles';
 
 export default function Input({
   onChange,
-  type,
   name,
   placeholder,
   readOnly,
   icon: Icon,
   background,
   value,
+  ...rest
 }) {
   if (typeof value === 'number' || value)
     return (
       <StyledInput
         onChange={onChange}
-        type={type}
         name={name}
         placeholder={placeholder}
         readOnly={readOnly}
         background={background}
         value={value}
+        {...rest}
       />
     );
 
@@ -30,21 +30,21 @@ export default function Input({
       {!Icon ? (
         <StyledInput
           onChange={onChange}
-          type={type}
           name={name}
           placeholder={placeholder}
           readOnly={readOnly}
           background={background}
+          {...rest}
         />
       ) : (
         <InputWrapper>
           <Icon />
           <StyledInput
             onChange={onChange}
-            type={type}
             name={name}
             placeholder={placeholder}
             background={background}
+            {...rest}
           />
         </InputWrapper>
       )}
@@ -63,7 +63,6 @@ Input.defaultProps = {
 
 Input.propTypes = {
   onChange: PropTypes.func,
-  type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),

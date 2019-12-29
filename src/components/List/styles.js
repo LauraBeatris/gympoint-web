@@ -19,10 +19,21 @@ export const StyledTable = styled.table`
   border: none;
   background: #fff;
   width: 100%;
+  border-radius: 0.4rem;
+  padding: 1.5rem;
+  border-collapse: collapse;
+
+  tr {
+    & + tr {
+      border-top: 1px solid #eee;
+    }
+
+    &:last-child {
+      padding-bottom: 2rem;
+    }
+  }
 
   thead th {
-    padding: 1.5rem 0rem;
-
     @media (max-width: 102.4rem) {
       padding-right: 0.25rem;
     }
@@ -50,10 +61,19 @@ export const StyledTable = styled.table`
 
   td.actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 
     @media (max-width: 102.4rem) {
       flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    > div {
+      @media (max-width: 102.4rem) {
+        display: flex;
+        flex-direction: column;
+      }
     }
 
     a {
@@ -100,8 +120,20 @@ export const StyledTable = styled.table`
   }
 
   tbody tr {
-    & + tr td {
-      padding-top: 2.5rem;
+    td {
+      padding: 1.5rem 0rem;
     }
+  }
+`;
+
+export const TableWrapper = styled.div`
+  width: 100%;
+  background: red;
+  padding: 3.5rem 2rem;
+  border-radius: 0.4rem;
+  background: #fff;
+
+  @media (max-width: 700px) {
+    padding: 3.5rem 0rem;
   }
 `;
