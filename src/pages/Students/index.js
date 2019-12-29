@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { MdAdd, MdSearch } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,8 @@ import toast from '~/services/toast';
 import { Container } from './styles';
 
 export default function StudentsList() {
+  const token = useSelector(state => state.auth.token);
+
   const [students, setStudents] = useState([]);
   const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,9 +23,12 @@ export default function StudentsList() {
     async function getStudents() {
       try {
         setLoading(true);
-
+        console.tron.log(token);
         const response = filter
-          ? await api.get('students', { params: { q: filter } })
+          ? await api.get('students', {
+              params: { q: filter },
+              headers: { Authentication: `Bearer ${token}` },
+            })
           : await api.get('students');
 
         return setStudents(response.data);
@@ -34,7 +40,7 @@ export default function StudentsList() {
     }
 
     getStudents();
-  }, [filter]);
+  }, [filter, token]);
 
   async function handleDelete(id) {
     try {
