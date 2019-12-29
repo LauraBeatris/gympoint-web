@@ -7,18 +7,6 @@ import { signInSuccess, signInFailure } from './actions';
 import api from '~/services/api';
 import history from '~/services/history';
 
-export function setToken({ payload }) {
-  // First time of the user in the app - Nothing sent to the redux store yet
-  if (!payload) return;
-
-  // Getting the token data from the auth state
-  const { token } = payload.auth;
-  // And then setting the authorization header with the token
-  if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-}
-
 export function* signIn({ payload }) {
   const { email, password } = payload;
 
@@ -30,7 +18,6 @@ export function* signIn({ payload }) {
     const response = yield call(api.post, 'sessions', { email, password });
     token = response.data.token;
     user = response.data.user;
-    setToken(token);
   } catch (err) {
     console.tron.log(`ERROR - Authentication failed - ${err.message}`);
     toast.error('Erro na autenticação. Verifique seus dados', {
@@ -56,6 +43,18 @@ export function* signIn({ payload }) {
 
 export function signOut() {
   return history.push('/');
+}
+
+export function setToken({ payload }) {
+  // First time of the user in the app - Nothing sent to the redux store yet
+  if (!payload) return;
+
+  // Getting the token data from the auth state
+  const { token } = payload.auth;
+  // And then setting the authorization header with the token
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
 }
 
 export default all([
