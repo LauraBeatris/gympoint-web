@@ -35,7 +35,7 @@ export default function ReactSelect({
         selectRef.select.clearValue();
       },
     });
-  }, [ref.current, fieldName]); // eslint-disable-line
+  }, [ref.current, fieldName, rest.value]); // eslint-disable-line
 
   function getDefaultValue() {
     if (!defaultValue) return null;

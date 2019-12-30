@@ -7,6 +7,7 @@ import { format, addMonths, parseISO } from 'date-fns';
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+import AsyncSelect from '~/components/AsyncSelect';
 import Label from '~/components/Label';
 import DatePicker from '~/components/DatePicker';
 
@@ -34,6 +35,10 @@ export default function RegistrationsEdit({ match }) {
   /* Plans options for the select component */
   const [plans, setPlans] = useState([]);
 
+  /* Changing student */
+
+  const [student, setStudent] = useState({ id: '', title: '' });
+
   /* Getting the plan initial data */
   useEffect(() => {
     async function getRegistration() {
@@ -48,10 +53,14 @@ export default function RegistrationsEdit({ match }) {
 
         setStartDate(new Date(response.data.start_date));
 
+        setStudent({
+          id: response.data.student.id,
+          title: response.data.student.name,
+        });
+
         return setRegistration({
           ...response.data,
           student_id: response.data.student.id,
-          student: response.data.student.name,
         });
       } catch (err) {
         const { contentMessage } = JSON.parse(err.response.data.error.message);
@@ -104,7 +113,7 @@ export default function RegistrationsEdit({ match }) {
   async function handleSubmit(data) {
     const start_date = new Date(data.start_date).toISOString();
     const plan_id = plan.id;
-    const { student_id } = registration;
+    const { id: student_id } = student;
 
     try {
       await api.put(`registrations/${registration_id}`, {
@@ -122,10 +131,7 @@ export default function RegistrationsEdit({ match }) {
         return toast(contentMessage, 'error');
       }
 
-      return toast(
-        'Erro no cadastro da matrícula. Verifique os dados',
-        'error'
-      );
+      return toast('Erro na edição da matrícula. Verifique os dados', 'error');
     }
   }
 
@@ -151,7 +157,16 @@ export default function RegistrationsEdit({ match }) {
         </Action>
         <FormContainer>
           <Label htmlFor="student_id">ALUNO</Label>
-          <Input type="text" name="student" id="student" readOnly />
+          {/* <Input type="text" name="student" id="student" readOnly /> */}
+          <AsyncSelect
+            name="student"
+            id="student"
+            value={student}
+            placeholder="Buscar aluno"
+            loadOptionsEndpoint="/students"
+            loadOptionsError="Erro no carregamento dos estudantes"
+            onChange={data => setStudent(data)}
+          />
 
           <div className="grid">
             <div>
