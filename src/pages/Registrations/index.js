@@ -128,6 +128,7 @@ export default function RegistrationsList() {
       ) : (
         !loading && <p> Sem matrículas no momento </p>
       )}
+      {loading && <p> Carregando... </p>}
     </Container>
   );
 }

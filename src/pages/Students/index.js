@@ -119,6 +119,7 @@ export default function StudentsList() {
       ) : (
         !loading && <p> Sem estudantes no momento </p>
       )}
+      {loading && <p> Carregando... </p>}
     </Container>
   );
 }

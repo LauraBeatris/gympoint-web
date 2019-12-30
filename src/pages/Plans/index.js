@@ -113,6 +113,7 @@ export default function PlansList() {
       ) : (
         !loading && <p> Sem planos no momento </p>
       )}
+      {loading && <p> Carregando... </p>}
     </Container>
   );
 }
