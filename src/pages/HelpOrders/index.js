@@ -70,7 +70,7 @@ export default function HelpOrdersList() {
           <title> GymPoint | Pedidos de auxílio </title>
         </Helmet>
         <Action title="Pedidos de auxílio" />
-        {helpOrders.length > 0 ? (
+        {!loading && helpOrders.length > 0 ? (
           <List>
             <thead>
               <tr>
