@@ -101,6 +101,7 @@ export default function HelpOrdersList() {
         ) : (
           !loading && <p> Sem pedidos de auxílio no momento </p>
         )}
+        {loading && <p> Carregando </p>}
       </Container>
       <Modal
         isOpen={isOpen}

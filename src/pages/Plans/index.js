@@ -85,8 +85,8 @@ export default function PlansList() {
             </tr>
           </thead>
           <tbody>
-            {plans.map(plan => (
-              <tr key={plan.id}>
+            {plans.map((plan, key) => (
+              <tr key={plan.id || key}>
                 <td>{plan.title}</td>
                 <td className="center">{plan.formattedDuration}</td>
                 <td className="center">{plan.formattedPrice}</td>
