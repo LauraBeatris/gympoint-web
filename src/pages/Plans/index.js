@@ -45,19 +45,23 @@ export default function PlansList() {
   }, []);
 
   async function handleDelete(id) {
-    try {
-      await api.delete(`plans/${id}`);
-      toast('Plano deletado com sucesso', 'success');
+    const result = window.confirm('Desejar deletar esse plano?');
+    if (result) {
+      try {
+        await api.delete(`plans/${id}`);
+        toast('Plano deletado com sucesso', 'success');
 
-      return setTimeout(() => {
-        window.location.reload(false);
-      }, 2000);
-    } catch (err) {
-      if (err.response.data.messageContent) {
-        return toast(err.response.data.messageContent, 'error');
+        return setTimeout(() => {
+          window.location.reload(false);
+        }, 2000);
+      } catch (err) {
+        if (err.response.data.messageContent) {
+          return toast(err.response.data.messageContent, 'error');
+        }
+        return toast('Erro na deleção do plano.', 'error');
       }
-      return toast('Erro na deleção do plano.', 'error');
     }
+    return false;
   }
 
   return (

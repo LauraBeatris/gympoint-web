@@ -50,19 +50,23 @@ export default function RegistrationsList() {
   }, []);
 
   async function handleDelete(id) {
-    try {
-      await api.delete(`/registrations/${id}`);
-      toast('Matrícula deletada com sucesso', 'success');
+    const result = window.confirm('Desejar deletar essa matrícula?');
+    if (result) {
+      try {
+        await api.delete(`/registrations/${id}`);
+        toast('Matrícula deletada com sucesso', 'success');
 
-      return setTimeout(() => {
-        window.location.reload(false);
-      }, 2000);
-    } catch (err) {
-      if (err.response.data) {
-        return toast(err.response.data.messageContent, 'error');
+        return setTimeout(() => {
+          window.location.reload(false);
+        }, 2000);
+      } catch (err) {
+        if (err.response.data) {
+          return toast(err.response.data.messageContent, 'error');
+        }
+        return toast('Erro na deleção da matrícula.', 'error');
       }
-      return toast('Erro na deleção da matrícula.', 'error');
     }
+    return false;
   }
 
   return (
