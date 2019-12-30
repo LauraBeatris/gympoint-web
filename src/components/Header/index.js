@@ -42,7 +42,7 @@ export default function Header() {
         </Navigation>
 
         <Profile>
-          <strong>{profile.name}</strong>
+          <strong>{profile ? profile.name : 'Carregando...'}</strong>
           <button type="button" onClick={handleSignOut}>
             Sair do sistema
           </button>
