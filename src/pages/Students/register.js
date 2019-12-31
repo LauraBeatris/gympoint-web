@@ -5,6 +5,7 @@ import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+import MaskInput from '~/components/MaskInput';
 import Label from '~/components/Label';
 
 import api from '~/services/api';
@@ -13,11 +14,18 @@ import toast from '~/services/toast';
 import { FormContainer, StyledForm, Container } from './styles';
 
 import schema from '~/validators/student';
+import removeMask from '~/helpers/removeMask';
 
 export default function StudentsRegister() {
-  async function handleSubmit(data) {
+  async function handleSubmit({ name, email, age, weight, height }) {
     try {
-      await api.post('students', data);
+      await api.post('students', {
+        name,
+        email,
+        age,
+        weight: removeMask(weight),
+        height: removeMask(height),
+      });
 
       toast('Aluno cadastrado com sucesso', 'success');
 
@@ -64,12 +72,24 @@ export default function StudentsRegister() {
 
             <div>
               <Label htmlFor="weight">Peso (em kg)</Label>
-              <Input type="text" name="weight" id="weight" />
+              <MaskInput
+                type="text"
+                name="weight"
+                id="weight"
+                maskChar="0"
+                inputMask="99,9kg"
+              />
             </div>
 
             <div>
               <Label htmlFor="height">Altura</Label>
-              <Input type="text" name="height" id="height" />
+              <MaskInput
+                type="text"
+                name="height"
+                id="height"
+                inputMask="9,99m"
+                maskChar="0"
+              />
             </div>
           </div>
         </FormContainer>

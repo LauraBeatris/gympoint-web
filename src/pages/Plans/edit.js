@@ -13,8 +13,9 @@ import history from '~/services/history';
 import toast from '~/services/toast';
 
 import { formatMoney } from '~/util/format';
+import removeMask from '~/helpers/removeMask';
 
-import { FormContainer, StyledForm, Container } from './styles';
+import { FormContainer, StyledForm, Container, Currency } from './styles';
 
 import schema from '~/validators/plans';
 
@@ -29,11 +30,17 @@ export default function PlansEdit({ match }) {
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
 
+  const [loading, setLoading] = useState(false);
+
   /* Getting the plan initial data */
   useEffect(() => {
     async function getPlan() {
       try {
+        setLoading(true);
+
         const response = await api.get(`plans/${plan_id}`);
+        setPrice(response.data.price);
+        setDuration(response.data.duration);
         return setPlan(response.data);
       } catch (err) {
         const { contentMessage } = JSON.parse(err.response.data.error.message);
@@ -42,6 +49,8 @@ export default function PlansEdit({ match }) {
         }
 
         return toast('Erro ao carregar os dados do plano.', 'error');
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -60,9 +69,13 @@ export default function PlansEdit({ match }) {
 
   /* Submitting the updated data */
 
-  async function handleSubmit(data) {
+  async function handleSubmit({ title }) {
     try {
-      await api.put(`plans/${plan_id}`, data);
+      await api.put(`plans/${plan_id}`, {
+        title,
+        duration,
+        price: removeMask(price),
+      });
 
       toast('Plano editado com sucesso', 'success');
 
@@ -93,44 +106,56 @@ export default function PlansEdit({ match }) {
             <MdDone /> Salvar
           </Button>
         </Action>
-        <FormContainer>
-          <Label htmlFor="title">TÍTULO DO PLANO</Label>
-          <Input type="text" name="title" id="title" />
-
-          <div>
-            <div>
-              <Label htmlFor="duration">DURAÇÃO (em meses)</Label>
-              <Input
-                type="text"
-                name="duration"
-                id="duration"
-                onChange={ev => setDuration(ev.target.value)}
-              />
-            </div>
+        {!loading ? (
+          <FormContainer>
+            <Label htmlFor="title">TÍTULO DO PLANO</Label>
+            <Input type="text" name="title" id="title" />
 
             <div>
-              <Label htmlFor="price">PREÇO MENSAL</Label>
-              <Input
-                type="text"
-                name="price"
-                id="price"
-                onChange={ev => setPrice(ev.target.value)}
-              />
-            </div>
+              <div>
+                <Label htmlFor="duration">DURAÇÃO (em meses)</Label>
+                <Input
+                  type="text"
+                  name="duration"
+                  id="duration"
+                  onChange={ev => setDuration(ev.target.value)}
+                />
+              </div>
 
-            <div>
-              <Label htmlFor="total_price">PREÇO TOTAL</Label>
-              <Input
-                background="#e0e0e0"
-                readOnly
-                type="text"
-                name="total_price"
-                id="total_price"
-                value={totalPrice}
-              />
+              <div>
+                <Label htmlFor="price">PREÇO MENSAL</Label>
+                <Currency
+                  name="price"
+                  id="price"
+                  prefix="R$"
+                  fixedDecimalScale
+                  decimalSeparator=","
+                  decimalScale={2}
+                  thousandSeparator="."
+                  value={price}
+                  onChange={ev => setPrice(ev.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="total_price">PREÇO TOTAL</Label>
+                <Currency
+                  name="total_price"
+                  id="total_price"
+                  prefix="R$"
+                  fixedDecimalScale
+                  decimalSeparator=","
+                  decimalScale={2}
+                  thousandSeparator="."
+                  value={totalPrice}
+                  disabled
+                />
+              </div>
             </div>
-          </div>
-        </FormContainer>
+          </FormContainer>
+        ) : (
+          <p> Carregando dados do plano... </p>
+        )}
       </StyledForm>
     </Container>
   );

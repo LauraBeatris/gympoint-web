@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Form } from '@rocketseat/unform';
+import CurrencyFormat from 'react-currency-format';
 
 export const Container = styled.div`
   & > p {
@@ -40,5 +41,20 @@ export const FormContainer = styled.div`
     }
 
     padding: 0rem 0.5rem;
+  }
+`;
+
+export const Currency = styled(CurrencyFormat)`
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  background: ${props => props.background};
+
+  color: #999;
+  font-size: 1.4rem;
+
+  padding: 1.1rem 1.4rem 1.1rem 1rem;
+
+  &::placeholder {
+    color: #999999;
   }
 `;

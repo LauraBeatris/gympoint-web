@@ -12,8 +12,9 @@ import history from '~/services/history';
 import toast from '~/services/toast';
 
 import { formatMoney } from '~/util/format';
+import removeMask from '~/helpers/removeMask';
 
-import { FormContainer, StyledForm, Container } from './styles';
+import { FormContainer, StyledForm, Container, Currency } from './styles';
 
 import schema from '~/validators/plans';
 
@@ -23,14 +24,19 @@ export default function PlansRegister() {
   const [price, setPrice] = useState(0);
 
   const totalPrice =
-    useMemo(() => formatMoney(Number(duration) * Number(price)), [
-      duration,
-      price,
-    ]) || formatMoney(0);
+    useMemo(() => {
+      let finalPrice;
+      if (typeof price === 'string') {
+        finalPrice = Number(removeMask(price)) / 100;
+      } else {
+        finalPrice = price;
+      }
+      return formatMoney(Number(duration) * Number(finalPrice));
+    }, [duration, price]) || formatMoney(0);
 
-  async function handleSubmit(data) {
+  async function handleSubmit({ title }) {
     try {
-      await api.post('plans', data);
+      await api.post('plans', { title, duration, price: removeMask(price) });
 
       toast('Plano cadastrado com sucesso', 'success');
 
@@ -74,23 +80,30 @@ export default function PlansRegister() {
 
             <div>
               <Label htmlFor="price">PREÇO MENSAL</Label>
-              <Input
-                type="price"
+              <Currency
                 name="price"
                 id="price"
+                prefix="R$"
+                fixedDecimalScale
+                decimalSeparator=","
+                decimalScale={2}
+                thousandSeparator="."
                 onChange={ev => setPrice(ev.target.value)}
               />
             </div>
 
             <div>
               <Label htmlFor="total_price">PREÇO TOTAL</Label>
-              <Input
-                background="#e0e0e0"
-                readOnly
-                type="text"
+              <Currency
                 name="total_price"
                 id="total_price"
+                prefix="R$"
+                fixedDecimalScale
+                decimalSeparator=","
+                decimalScale={2}
+                thousandSeparator="."
                 value={totalPrice}
+                disabled
               />
             </div>
           </div>

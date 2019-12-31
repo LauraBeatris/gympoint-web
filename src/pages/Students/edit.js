@@ -6,6 +6,7 @@ import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+
 import Label from '~/components/Label';
 
 import api from '~/services/api';
@@ -18,27 +19,35 @@ import schema from '~/validators/student';
 export default function StudentsEdit({ match }) {
   const { params } = match;
   const { student_id } = params;
-  const [student, setStudent] = useState({
-    email: '',
-    name: '',
-    age: '',
-    weight: '',
-    height: '',
-  });
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   // Loading student data
   useEffect(() => {
     async function getStudent() {
       try {
-        const response = await api
-          .get(`students/${student_id}`)
-          .then(res => setStudent(res.data));
+        setLoading(true);
+        const response = await api.get(`students/${student_id}`);
+
+        setName(response.data.name);
+        setAge(response.data.age);
+        setEmail(response.data.email);
+        setWeight(response.data.weight);
+        setHeight(response.data.height);
         return response;
       } catch (err) {
         return toast(
           'Falha ao procurar os dados do aluno. Verifique os dados novamente',
           'error'
         );
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -47,9 +56,7 @@ export default function StudentsEdit({ match }) {
 
   async function handleSubmit(data) {
     try {
-      await api
-        .put(`students/${student_id}`, data)
-        .then(res => setStudent(res.data));
+      await api.put(`students/${student_id}`, data);
 
       toast('Aluno atualizado com sucesso', 'success');
 
@@ -67,11 +74,8 @@ export default function StudentsEdit({ match }) {
       <Helmet>
         <title> Gympoint | Edição de aluno </title>
       </Helmet>
-      <StyledForm
-        initialData={student}
-        schema={schema.edit}
-        onSubmit={handleSubmit}
-      >
+
+      <StyledForm schema={schema.edit} onSubmit={handleSubmit}>
         <Action title="Edição de aluno">
           <Button to="/students">
             <MdKeyboardArrowLeft /> Voltar
@@ -80,61 +84,66 @@ export default function StudentsEdit({ match }) {
             <MdDone /> Salvar
           </Button>
         </Action>
-        <FormContainer>
-          <Label htmlFor="name">NOME COMPLETO</Label>
-          <Input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="John Joe"
-            onChange={e => setStudent({ ...student, name: e.target.value })}
-          />
+        {!loading ? (
+          <FormContainer>
+            <Label htmlFor="name">NOME COMPLETO</Label>
+            <Input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="John Joe"
+              onChange={e => setName(e.event.target)}
+              value={name}
+            />
 
-          <Label htmlFor="email">ENDEREÇO DE E-MAIL</Label>
-          <Input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="exemplo@gmail.com"
-            onChange={e => setStudent({ ...student, email: e.target.value })}
-          />
-
-          <div>
-            <div>
-              <Label htmlFor="age">IDADE</Label>
-              <Input
-                type="text"
-                name="age"
-                id="age"
-                onChange={e => setStudent({ ...student, age: e.target.value })}
-              />
-            </div>
+            <Label htmlFor="email">ENDEREÇO DE E-MAIL</Label>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="exemplo@gmail.com"
+              onChange={e => setEmail(e.target.value)}
+              value={email}
+            />
 
             <div>
-              <Label htmlFor="weight">Peso (em kg)</Label>
-              <Input
-                type="text"
-                name="weight"
-                id="weight"
-                onChange={e =>
-                  setStudent({ ...student, weight: e.target.value })
-                }
-              />
-            </div>
+              <div>
+                <Label htmlFor="age">IDADE</Label>
+                <Input
+                  type="text"
+                  name="age"
+                  id="age"
+                  onChange={e => setAge(e.target.value)}
+                  value={age}
+                />
+              </div>
 
-            <div>
-              <Label htmlFor="height">Altura</Label>
-              <Input
-                type="text"
-                name="height"
-                id="height"
-                onChange={e =>
-                  setStudent({ ...student, height: e.target.value })
-                }
-              />
+              <div>
+                <Label htmlFor="weight">Peso (em kg)</Label>
+                <Input
+                  type="text"
+                  name="weight"
+                  id="weight"
+                  onChange={e => setWeight(e.target.value)}
+                  value={weight}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="height">Altura</Label>
+                <Input
+                  type="text"
+                  name="height"
+                  id="height"
+                  onChange={e => setHeight(e.target.value)}
+                  value={height}
+                />
+              </div>
             </div>
-          </div>
-        </FormContainer>
+          </FormContainer>
+        ) : (
+          <p> Carregando estudante... </p>
+        )}
       </StyledForm>
     </Container>
   );
