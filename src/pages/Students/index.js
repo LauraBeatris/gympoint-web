@@ -125,7 +125,7 @@ export default function StudentsList() {
             </tbody>
           </List>
         ) : (
-          <p> Sem estudantes no momento </p>
+          !loading && <p> Sem estudantes no momento </p>
         )}
         <Pagination onChange={p => setPage(p)} current={page} total={50} />
       </Container>
