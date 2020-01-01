@@ -31,6 +31,7 @@
   Web App of the **Gympoint System**. As a admin, you're able to see the list of students, registrations and plans, as well edting/creating new ones. Also, answer and see the help orders that're pending. 
   
   Future features: 
+  <>
     - Trainings made by the Personal Trainer
     - Students can access some datas that show how they've been improving in their trainings
  
