@@ -54,10 +54,13 @@
 ```   
   // 1 - Git Clone
   
-  // 2 - Installing the dependencies
+  // 2 - Copy the .env.example and set the environment variables
+  cp .env.example .env
+  
+  // 3 - Installing the dependencies
   yarn install
   
-  // 3 - Run the application (Be sure to have the API running locally)
+  // 4 - Run the application (Be sure to have the API running locally)
   yarn start
   
 ```
