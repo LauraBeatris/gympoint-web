@@ -27,8 +27,8 @@
   <a href="#memo-licence">Licence</a>
 </p>
 
-[Signin](https://ibb.co/3yn1tVZ)
-[Plans List](https://ibb.co/8dBBLPW)
+![Signin](https://ibb.co/3yn1tVZ)
+![Plans List](https://ibb.co/8dBBLPW)
 
 ## :rocket: About the project
   Web App of the **Gympoint System**. As a admin, you're able to see the list of students, registrations and plans, as well edting/creating new ones. Also, answer and see the help orders that're pending. 
