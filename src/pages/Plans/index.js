@@ -24,7 +24,7 @@ export default function PlansList() {
       try {
         setLoading(true);
 
-        const response = await api.get('plans');
+        const response = await api.get('plans', { params: { page } });
 
         const data = response.data.map(plan => ({
           ...plan,
@@ -44,7 +44,7 @@ export default function PlansList() {
     }
 
     getPlans();
-  }, []);
+  }, [page]);
 
   async function handleDelete(id) {
     const result = window.confirm('Desejar deletar esse plano?');
@@ -76,8 +76,10 @@ export default function PlansList() {
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>
-      {plans.length > 0 ? (
-        <Container>
+
+      <Container>
+        {loading && <p> Carregando... </p>}
+        {plans.length > 0 && !loading ? (
           <List>
             <thead>
               <tr>
@@ -113,12 +115,11 @@ export default function PlansList() {
               ))}
             </tbody>
           </List>
-          <Pagination onChange={p => setPage(p)} current={page} total={25} />
-        </Container>
-      ) : (
-        !loading && <p> Sem planos no momento </p>
-      )}
-      {loading && <p> Carregando... </p>}
+        ) : (
+          !loading && <p> Sem planos no momento </p>
+        )}
+        <Pagination onChange={p => setPage(p)} current={page} total={50} />
+      </Container>
     </Container>
   );
 }

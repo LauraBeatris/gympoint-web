@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import Modal from 'react-modal';
+import Pagination from 'rc-pagination';
 
 import Action from '~/components/Actions';
 import List from '~/components/List';
@@ -14,6 +15,7 @@ export default function HelpOrdersList() {
   const [helpOrders, setHelpOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [choosed, setChoosed] = useState({});
 
@@ -22,7 +24,9 @@ export default function HelpOrdersList() {
       try {
         setLoading(true);
 
-        const response = await api.get('help-orders/pending');
+        const response = await api.get('help-orders/pending', {
+          params: { page },
+        });
 
         setHelpOrders(response.data);
       } catch (err) {
@@ -33,7 +37,7 @@ export default function HelpOrdersList() {
     }
 
     getHelpOrders();
-  }, []);
+  }, [page]);
 
   function openModal(helpOrderId, helpOrderQuestion) {
     setChoosed({ id: helpOrderId, question: helpOrderQuestion });
@@ -70,38 +74,41 @@ export default function HelpOrdersList() {
           <title> GymPoint | Pedidos de auxílio </title>
         </Helmet>
         <Action title="Pedidos de auxílio" />
-        {!loading && helpOrders.length > 0 ? (
-          <List>
-            <thead>
-              <tr>
-                <th> Aluno </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {helpOrders.map(helpOrder => (
-                <tr key={helpOrder.id}>
-                  <td>{helpOrder.student.name}</td>
-                  <td className="actions">
-                    <button
-                      type="button"
-                      className="blue"
-                      onClick={() =>
-                        openModal(helpOrder.id, helpOrder.question)
-                      }
-                    >
-                      {' '}
-                      Responder{' '}
-                    </button>
-                  </td>
+        <Container>
+          {loading && <p> Carregando </p>}
+          {!loading && helpOrders.length > 0 ? (
+            <List>
+              <thead>
+                <tr>
+                  <th> Aluno </th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </List>
-        ) : (
-          !loading && <p> Sem pedidos de auxílio no momento </p>
-        )}
-        {loading && <p> Carregando </p>}
+              </thead>
+              <tbody>
+                {helpOrders.map(helpOrder => (
+                  <tr key={helpOrder.id}>
+                    <td>{helpOrder.student.name}</td>
+                    <td className="actions">
+                      <button
+                        type="button"
+                        className="blue"
+                        onClick={() =>
+                          openModal(helpOrder.id, helpOrder.question)
+                        }
+                      >
+                        {' '}
+                        Responder{' '}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </List>
+          ) : (
+            !loading && <p> Sem pedidos de auxílio no momento </p>
+          )}
+          <Pagination onChange={p => setPage(p)} current={page} total={50} />
+        </Container>
       </Container>
       <Modal
         isOpen={isOpen}

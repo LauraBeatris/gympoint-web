@@ -25,7 +25,7 @@ export default function RegistrationsList() {
       try {
         setLoading(true);
 
-        const response = await api.get('registrations');
+        const response = await api.get('registrations', { params: { page } });
         const data = response.data.map(registration => ({
           ...registration,
           formattedStartDate: format(
@@ -49,7 +49,7 @@ export default function RegistrationsList() {
     }
 
     getRegistrations();
-  }, []);
+  }, [page]);
 
   async function handleDelete(id) {
     const result = window.confirm('Desejar deletar essa matrícula?');
@@ -81,8 +81,11 @@ export default function RegistrationsList() {
           <MdAdd color="#fff" /> Cadastrar
         </Button>{' '}
       </Action>
-      {registrations.length > 0 ? (
-        <Container>
+
+      <Container>
+        {loading && <p> Carregando... </p>}
+
+        {registrations.length > 0 && !loading ? (
           <List>
             <thead>
               <tr>
@@ -128,12 +131,11 @@ export default function RegistrationsList() {
               ))}
             </tbody>
           </List>
-          <Pagination onChange={p => setPage(p)} current={page} total={25} />
-        </Container>
-      ) : (
-        !loading && <p> Sem matrículas no momento </p>
-      )}
-      {loading && <p> Carregando... </p>}
+        ) : (
+          !loading && <p> Sem matrículas no momento </p>
+        )}
+        <Pagination onChange={p => setPage(p)} current={page} total={50} />
+      </Container>
     </Container>
   );
 }
