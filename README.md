@@ -23,7 +23,8 @@
 
 <p align="center">
   <a href="#rocket-about-the-project">About the project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#ballot_box_with_check-goals">Goals</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#runner_instalattion">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#construction_testing">Testing</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#memo-licence">Licence</a>
 </p>
 
@@ -48,7 +49,7 @@
  <br>
   To see the **user interface**, click here to take a look in the web aplicattion: [Gympoint Mobile](https://github.com/LauraBeatris/gympoint-mobile)
 
-## :rocket: Installation 
+## :runner: Installation 
 
 ```   
   // 1 - Git Clone
@@ -61,7 +62,7 @@
   
 ```
 
-## Testing 
+## :construction: Testing 
 Soon.
 
 
