@@ -27,9 +27,9 @@
   <a href="#memo-licence">Licence</a>
 </p>
 
-<a align="center" href="https://ibb.co/3yn1tVZ"><img src="https://i.ibb.co/tM9Bynr/Web-Signin.png" alt="Web-Signin" border="0"></a>
+<a href="https://ibb.co/3yn1tVZ"><img align="center" width="100" height="100" src="https://i.ibb.co/tM9Bynr/Web-Signin.png" alt="Web-Signin" border="0"></a>
 <br>
-<a align="center" href="https://ibb.co/8dBBLPW"><img src="https://i.ibb.co/gP77Lt5/Web-Plans.png" alt="Web-Plans" border="0"></a>
+<a align="center" href="https://ibb.co/8dBBLPW"><img align="center" width="100" height="100" src="https://i.ibb.co/gP77Lt5/Web-Plans.png" alt="Web-Plans" border="0"></a>
 
 ## :rocket: About the project
   Web App of the **Gympoint System**. As a admin, you're able to see the list of students, registrations and plans, as well edting/creating new ones. Also, answer and see the help orders that're pending. 
