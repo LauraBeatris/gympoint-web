@@ -92,7 +92,7 @@ export default function StudentsEdit({ match }) {
               name="name"
               id="name"
               placeholder="John Joe"
-              onChange={e => setName(e.event.target)}
+              onChange={e => setName(e.target.value)}
               value={name}
             />
 
