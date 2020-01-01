@@ -27,11 +27,14 @@
   <a href="#memo-licence">Licence</a>
 </p>
 
+[Signin](https://ibb.co/3yn1tVZ)
+[Plans List](https://ibb.co/8dBBLPW)
+
 ## :rocket: About the project
   Web App of the **Gympoint System**. As a admin, you're able to see the list of students, registrations and plans, as well edting/creating new ones. Also, answer and see the help orders that're pending. 
   
   Future features: 
-  <>
+  <br>
     - Trainings made by the Personal Trainer
     - Students can access some datas that show how they've been improving in their trainings
  
@@ -39,10 +42,21 @@
  <br>
   To see the **user interface**, click here to take a look in the web aplicattion: [Gympoint Mobile](https://github.com/LauraBeatris/gympoint-mobile)
 
+## :rocket: Installation 
 
-## :ballot_box_with_check: Goals
+```   
+  // 1 - Git Clone
+  
+  // 2 - Installing the dependencies
+  yarn install
+  
+  // 3 - Run de apllication (Be sure to have the API running locally)
+  yarn start
+  
+```
 
-Apply all the important concepts of a Rest API with Express and Sequelize ORM, using a services like PostgreSQL, MongoDB, Redis with BeeQueue and Nodemailer with Mailgun. 
+## Testing 
+Soon.
 
 
 ## :memo: Licence
