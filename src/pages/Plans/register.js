@@ -27,16 +27,21 @@ export default function PlansRegister() {
     useMemo(() => {
       let finalPrice;
       if (typeof price === 'string') {
-        finalPrice = Number(removeMask(price)) / 100;
+        finalPrice = Number(removeMask(price) / 100);
       } else {
         finalPrice = price;
       }
+
       return formatMoney(Number(duration) * Number(finalPrice));
     }, [duration, price]) || formatMoney(0);
 
   async function handleSubmit({ title }) {
     try {
-      await api.post('plans', { title, duration, price: removeMask(price) });
+      await api.post('plans', {
+        title,
+        duration,
+        price: removeMask(price) / 100,
+      });
 
       toast('Plano cadastrado com sucesso', 'success');
 

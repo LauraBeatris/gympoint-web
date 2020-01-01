@@ -59,22 +59,32 @@ export default function PlansEdit({ match }) {
 
   /* Calculating the total price everytime that the duration and price infos change */
   const totalPrice =
-    useMemo(
-      () =>
-        formatMoney(
-          Number(duration || plan.duration) * Number(price || plan.price)
-        ),
-      [duration, plan.duration, plan.price, price]
-    ) || formatMoney(0);
+    useMemo(() => {
+      let finalPrice;
+      if (typeof price === 'string') {
+        finalPrice = Number(removeMask(price) / 100);
+      } else {
+        finalPrice = price;
+      }
+
+      return formatMoney(Number(duration) * Number(finalPrice));
+    }, [duration, price]) || formatMoney(0);
 
   /* Submitting the updated data */
 
   async function handleSubmit({ title }) {
+    let finalPrice;
+    if (typeof price === 'string') {
+      finalPrice = Number(removeMask(price) / 100);
+    } else {
+      finalPrice = price;
+    }
+
     try {
       await api.put(`plans/${plan_id}`, {
         title,
         duration,
-        price: removeMask(price),
+        price: finalPrice,
       });
 
       toast('Plano editado com sucesso', 'success');
@@ -84,7 +94,7 @@ export default function PlansEdit({ match }) {
       if (err.response.data.messageContent) {
         return toast(err.response.data.messageContent, 'error');
       }
-      return toast('Erro na edição do plano. Verifique os dados', 'error');
+      return toast('Erro na atualização do plano. Verifique os dados', 'error');
     }
   }
 
