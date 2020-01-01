@@ -9,6 +9,7 @@ export default function DatePicker({
   minDate,
   onChange,
   value,
+  ...rest
 }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
@@ -39,6 +40,7 @@ export default function DatePicker({
         todayButton="Hoje"
         placeholderText={placeholder}
         minDate={minDate}
+        {...rest}
       />
     );
 

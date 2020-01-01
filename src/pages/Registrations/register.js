@@ -2,41 +2,42 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Helmet from 'react-helmet';
 import { MdKeyboardArrowLeft, MdDone } from 'react-icons/md';
 import { format, addMonths } from 'date-fns';
+import pt from 'date-fns/locale/pt';
+import SelectAsync from 'react-select/async';
+import Select from 'react-select';
+import { registerLocale } from 'react-datepicker';
 
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
 import Label from '~/components/Label';
-import AsyncSelect from '~/components/AsyncSelect';
 import DatePicker from '~/components/DatePicker';
 
 import api from '~/services/api';
 import history from '~/services/history';
 import toast from '~/services/toast';
 
-import { formatMoney } from '~/util/format';
-
-import { FormContainer, StyledForm, Container, StyledSelect } from './styles';
+import { FormContainer, StyledForm, Container, Currency } from './styles';
 
 import schema from '~/validators/registration';
 
 export default function RegistrationsRegister() {
   const [plans, setPlans] = useState([]);
+  const [student, setStudent] = useState({});
 
   /* To calculate the final price */
-  const [plan, setPlan] = useState(null);
+  const [plan, setPlan] = useState('');
   const [startDate, setStartDate] = useState(new Date());
+
+  registerLocale('pt', pt);
 
   // Getting the plans data for the select component
   useEffect(() => {
     async function getPlans() {
       try {
         const response = await api.get('plans');
-        const data = response.data.map(({ id, title, duration, price }) => ({
-          id: JSON.stringify({ duration, price, id }),
-          title,
-        }));
-        setPlans(data);
+
+        setPlans(response.data);
       } catch (err) {
         toast('Erro no carregamento dos planos.', 'error');
       }
@@ -46,25 +47,54 @@ export default function RegistrationsRegister() {
   }, []);
 
   // Calculating the final price
-  const finalPrice =
+  const total =
     useMemo(() => {
-      if (plan) return formatMoney(plan.duration * plan.price);
+      if (plan) return plan.duration * plan.price;
       return null;
-    }, [plan]) || formatMoney(0);
+    }, [plan]) || 0;
 
   const formattedEndDate = useMemo(() => {
     if (plan) {
       return format(addMonths(startDate, plan.duration), "dd'/'MM'/'yyyy");
     }
-    return null;
+    return 'DD/MM/YYYY';
   }, [plan, startDate]);
 
-  async function handleSubmit(data) {
-    data.start_date = new Date(data.start_date).toISOString();
-    data.plan_id = JSON.parse(data.plan_id).id;
+  async function loadStudents(query) {
+    // Receiving the query value from the input element
+    const response = await api.get(`students?q=${query}`);
+    const filteredStudents = response.data.map(s => {
+      return {
+        ...s,
+        value: s.id,
+        label: s.name,
+      };
+    });
+
+    // One of the ways to return data to the AsyncSelect component -> Returning a promise
+    return new Promise(resolve => {
+      resolve(filteredStudents);
+    });
+  }
+
+  async function handleSubmit({ start_date }) {
+    start_date = new Date(start_date).toISOString();
+    const plan_id = plan.id;
+    const student_id = student.id;
+
+    if (!plan_id)
+      return toast(
+        'Por favor, selecione um plano para efetuar a matrícula',
+        'error'
+      );
+    if (!student_id)
+      return toast(
+        'Por favor, selecione um aluno para efetuar a matrícula',
+        'error'
+      );
 
     try {
-      await api.post('registrations', data);
+      await api.post('registrations', { plan_id, start_date, student_id });
 
       toast('Aluno matrículado com sucesso', 'success');
 
@@ -82,6 +112,17 @@ export default function RegistrationsRegister() {
     }
   }
 
+  const customStyles = {
+    control: provided => ({
+      ...provided,
+      minHeight: '38px',
+    }),
+    indicatorsContainer: provided => ({
+      ...provided,
+      height: '38px',
+    }),
+  };
+
   return (
     <Container>
       <Helmet>
@@ -97,24 +138,32 @@ export default function RegistrationsRegister() {
           </Button>
         </Action>
         <FormContainer>
-          <Label htmlFor="student_id">ALUNO</Label>
-          <AsyncSelect
-            name="student_id"
-            id="student_id"
+          <Label htmlFor="student">ALUNO</Label>
+          <SelectAsync
+            className="select"
+            cacheOptions
+            isClearable
+            defaultOptions
+            loadOptions={e => loadStudents(e)}
+            value={student}
+            onChange={e => setStudent(e)}
             placeholder="Buscar aluno"
-            loadOptionsEndpoint="/students"
-            loadOptionsError="Erro no carregamento dos estudantes"
+            styles={customStyles}
           />
 
           <div className="grid">
             <div>
-              <Label htmlFor="plan_id">PLANO</Label>
-              <StyledSelect
-                name="plan_id"
-                id="plan_id"
+              <Label htmlFor="plan">PLANO</Label>
+              <Select
+                name="plan"
+                id="plan"
                 placeholder="Selecione um plano"
                 options={plans}
-                onChange={e => setPlan(JSON.parse(e.target.value))}
+                value={plan}
+                getOptionLabel={option => option.title}
+                getOptionValue={option => option.id}
+                onChange={e => setPlan(e)}
+                styles={customStyles}
               />
             </div>
 
@@ -123,8 +172,11 @@ export default function RegistrationsRegister() {
               <DatePicker
                 name="start_date"
                 id="start_date"
+                locale="pt"
+                dateFormat="dd/MM/yyyy"
                 placeholder="Selecione uma data de início"
                 minDate={startDate}
+                value={startDate}
                 onChange={date => setStartDate(date)}
               />
             </div>
@@ -132,24 +184,25 @@ export default function RegistrationsRegister() {
             <div>
               <Label htmlFor="end_date">DATA DE TÉRMINO</Label>
               <Input
-                readOnly
-                background="#e0e0e0"
-                type="text"
-                name="end_date"
                 id="end_date"
-                placeholder="DD/MM/AAAA"
+                name="end_date"
                 value={formattedEndDate}
+                disabled
               />
             </div>
             <div>
               <Label htmlFor="price">VALOR FINAL</Label>
-              <Input
-                readOnly
+              <Currency
                 background="#e0e0e0"
-                type="text"
-                name="price"
-                id="price"
-                value={finalPrice}
+                prefix="R$"
+                fixedDecimalScale
+                decimalSeparator=","
+                decimalScale={2}
+                thousandSeparator="."
+                name="total"
+                id="total"
+                value={total}
+                disabled
               />
             </div>
           </div>

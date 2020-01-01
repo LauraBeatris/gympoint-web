@@ -36,7 +36,6 @@ export default function RegistrationsEdit({ match }) {
   const [plans, setPlans] = useState([]);
 
   /* Changing student */
-
   const [student, setStudent] = useState({ id: '', title: '' });
 
   /* Getting the plan initial data */
@@ -49,6 +48,7 @@ export default function RegistrationsEdit({ match }) {
           duration: response.data.plan.duration,
           price: response.data.plan.price,
           id: response.data.plan.id,
+          title: response.data.plan.title,
         });
 
         setStartDate(new Date(response.data.start_date));
@@ -80,11 +80,7 @@ export default function RegistrationsEdit({ match }) {
     async function getPlans() {
       try {
         const response = await api.get('plans');
-        const data = response.data.map(({ id, title, duration, price }) => ({
-          id: JSON.stringify({ duration, price, id }),
-          title,
-        }));
-        setPlans(data);
+        setPlans(response.data);
       } catch (err) {
         toast('Erro no carregamento dos planos.', 'error');
       }
@@ -176,8 +172,10 @@ export default function RegistrationsEdit({ match }) {
                 id="plan_id"
                 placeholder="Selecione um plano"
                 options={plans}
-                value={JSON.stringify(plan)}
-                onChange={e => setPlan(JSON.parse(e.target.value))}
+                value={plan}
+                onChange={e => setPlan(e)}
+                getOptionLabel={option => option.title}
+                getOptionValue={option => option.id}
               />
             </div>
 

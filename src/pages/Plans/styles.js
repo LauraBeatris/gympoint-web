@@ -52,8 +52,6 @@ export const Currency = styled(CurrencyFormat)`
   color: #999;
   font-size: 1.4rem;
 
-  padding: 1.1rem 1.4rem 1.1rem 1rem;
-
   &::placeholder {
     color: #999999;
   }

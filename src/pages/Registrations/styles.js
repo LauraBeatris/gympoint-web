@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Form, Select } from '@rocketseat/unform';
+import { Form } from '@rocketseat/unform';
+import Select from 'react-select';
+import CurrencyFormat from 'react-currency-format';
 
 export const Container = styled.div`
   & > p {
@@ -17,6 +19,22 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0rem 2rem;
+
+  .select {
+    span {
+      padding: 0 !important;
+    }
+
+    border-radius: 0.4rem;
+    background: ${props => props.background};
+
+    color: #999;
+    font-size: 1.4rem;
+
+    &::placeholder {
+      color: #999999;
+    }
+  }
 
   div.grid {
     display: grid;
@@ -44,15 +62,26 @@ export const FormContainer = styled.div`
 `;
 
 export const StyledSelect = styled(Select)`
-  border: 1px solid #ddd;
   border-radius: 0.4rem;
-  background: #fff;
   margin-bottom: 0.5rem;
 
   color: #999;
   font-size: 1.4rem;
 
-  padding: 1rem 1.4rem 1rem 1rem;
+  &::placeholder {
+    color: #999999;
+  }
+`;
+
+export const Currency = styled(CurrencyFormat)`
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  background: ${props => props.background};
+
+  color: #999;
+  font-size: 1.4rem;
+
+  padding: 1.1rem 1.4rem 1.1rem 1rem;
 
   &::placeholder {
     color: #999999;
