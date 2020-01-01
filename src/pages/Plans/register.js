@@ -36,6 +36,12 @@ export default function PlansRegister() {
     }, [duration, price]) || formatMoney(0);
 
   async function handleSubmit({ title }) {
+    if (!price)
+      return toast(
+        'Por favor, digite o preço mensal do plano antes de cria-lo',
+        'error'
+      );
+
     try {
       await api.post('plans', {
         title,
@@ -47,7 +53,7 @@ export default function PlansRegister() {
 
       return history.push('/plans');
     } catch (err) {
-      if (err.response.data.messageContent) {
+      if (err.response && err.response.data.messageContent) {
         return toast(err.response.data.messageContent, 'error');
       }
       return toast('Erro no cadastro do plano. Verifique os dados', 'error');

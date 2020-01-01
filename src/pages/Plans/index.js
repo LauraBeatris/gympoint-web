@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import Pagination from 'rc-pagination';
 
 import Action from '~/components/Actions';
 import Button from '~/components/Button';
@@ -16,6 +17,7 @@ import { Container } from './styles';
 export default function PlansList() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     async function getPlans() {
@@ -75,41 +77,44 @@ export default function PlansList() {
         </Button>{' '}
       </Action>
       {plans.length > 0 ? (
-        <List>
-          <thead>
-            <tr>
-              <th> TÍTULO </th>
-              <th className="center"> DURAÇÃO </th>
-              <th className="center"> VALOR p/ MÊS </th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {plans.map((plan, key) => (
-              <tr key={plan.id || key}>
-                <td>{plan.title}</td>
-                <td className="center">{plan.formattedDuration}</td>
-                <td className="center">{plan.formattedPrice}</td>
-                <td className="actions">
-                  <div>
-                    <Link to={`/plans/${plan.id}/edit`} className="blue">
-                      {' '}
-                      Editar{' '}
-                    </Link>
-                    <button
-                      type="button"
-                      className="red"
-                      onClick={() => handleDelete(plan.id)}
-                    >
-                      {' '}
-                      Apagar{' '}
-                    </button>
-                  </div>
-                </td>
+        <Container>
+          <List>
+            <thead>
+              <tr>
+                <th> TÍTULO </th>
+                <th className="center"> DURAÇÃO </th>
+                <th className="center"> VALOR p/ MÊS </th>
+                <th />
               </tr>
-            ))}
-          </tbody>
-        </List>
+            </thead>
+            <tbody>
+              {plans.map((plan, key) => (
+                <tr key={plan.id || key}>
+                  <td>{plan.title}</td>
+                  <td className="center">{plan.formattedDuration}</td>
+                  <td className="center">{plan.formattedPrice}</td>
+                  <td className="actions">
+                    <div>
+                      <Link to={`/plans/${plan.id}/edit`} className="blue">
+                        {' '}
+                        Editar{' '}
+                      </Link>
+                      <button
+                        type="button"
+                        className="red"
+                        onClick={() => handleDelete(plan.id)}
+                      >
+                        {' '}
+                        Apagar{' '}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </List>
+          <Pagination onChange={p => setPage(p)} current={page} total={25} />
+        </Container>
       ) : (
         !loading && <p> Sem planos no momento </p>
       )}

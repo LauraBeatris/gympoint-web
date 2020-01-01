@@ -18,6 +18,13 @@ import removeMask from '~/helpers/removeMask';
 
 export default function StudentsRegister() {
   async function handleSubmit({ name, email, age, weight, height }) {
+    if (!weight) {
+      return toast('Por favor, digite o peso do aluno antes de cadastra-lo');
+    }
+    if (!height) {
+      return toast('Por favor, digite a altura do aluno antes de cadastra-lo');
+    }
+
     try {
       await api.post('students', {
         name,
@@ -73,7 +80,6 @@ export default function StudentsRegister() {
             <div>
               <Label htmlFor="weight">Peso (em kg)</Label>
               <MaskInput
-                type="text"
                 name="weight"
                 id="weight"
                 maskChar="0"
@@ -84,7 +90,6 @@ export default function StudentsRegister() {
             <div>
               <Label htmlFor="height">Altura</Label>
               <MaskInput
-                type="text"
                 name="height"
                 id="height"
                 inputMask="9,99m"

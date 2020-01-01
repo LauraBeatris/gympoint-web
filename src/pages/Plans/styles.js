@@ -7,6 +7,21 @@ export const Container = styled.div`
     color: #444;
     font-size: 1.6rem;
   }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .rc-pagination {
+    align-self: center;
+    margin: 30px 0px;
+
+    .rc-pagination-item-active {
+      background-color: #ee4d64;
+      border-color: #ee4d64;
+    }
+  }
 `;
 
 export const StyledForm = styled(Form)`
@@ -51,6 +66,8 @@ export const Currency = styled(CurrencyFormat)`
 
   color: #999;
   font-size: 1.4rem;
+
+  padding: 1.1rem 1.4rem 1.1rem 1rem;
 
   &::placeholder {
     color: #999999;

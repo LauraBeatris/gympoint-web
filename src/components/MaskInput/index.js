@@ -4,7 +4,7 @@ import { useField } from '@rocketseat/unform';
 import { StyledInput } from './styles';
 
 export default function MaskInput({ name, inputMask, maskChar, defaultValue }) {
-  const { fieldName, registerField } = useField(name);
+  const { fieldName, registerField, error } = useField(name);
   const [value, setValue] = useState(defaultValue || '');
   const ref = useRef();
 
@@ -23,16 +23,19 @@ export default function MaskInput({ name, inputMask, maskChar, defaultValue }) {
   }
 
   return (
-    <StyledInput
-      type="text"
-      id={fieldName}
-      name={fieldName}
-      mask={inputMask}
-      maskChar={maskChar}
-      value={value}
-      onChange={handleChange}
-      ref={ref}
-    />
+    <>
+      <StyledInput
+        type="text"
+        id={fieldName}
+        name={fieldName}
+        mask={inputMask}
+        maskChar={maskChar}
+        value={value}
+        onChange={handleChange}
+        ref={ref}
+      />
+      {error && <span>{error}</span>}
+    </>
   );
 }
 

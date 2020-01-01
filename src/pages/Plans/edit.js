@@ -73,6 +73,12 @@ export default function PlansEdit({ match }) {
   /* Submitting the updated data */
 
   async function handleSubmit({ title }) {
+    if (!price)
+      return toast(
+        'Por favor, digite o preço mensal do plano antes de cria-lo',
+        'error'
+      );
+
     let finalPrice;
     if (typeof price === 'string') {
       finalPrice = Number(removeMask(price) / 100);
@@ -91,7 +97,7 @@ export default function PlansEdit({ match }) {
 
       return history.push('/plans');
     } catch (err) {
-      if (err.response.data.messageContent) {
+      if (err.response && err.response.data.messageContent) {
         return toast(err.response.data.messageContent, 'error');
       }
       return toast('Erro na atualização do plano. Verifique os dados', 'error');

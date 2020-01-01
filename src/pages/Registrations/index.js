@@ -3,6 +3,7 @@ import Helmet from 'react-helmet';
 import { parseISO, format } from 'date-fns';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import Pagination from 'rc-pagination';
 
 import locale from 'date-fns/locale/pt-BR';
 import Action from '~/components/Actions';
@@ -17,6 +18,7 @@ import { Container } from './styles';
 export default function RegistrationsList() {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     async function getRegistrations() {
@@ -80,51 +82,54 @@ export default function RegistrationsList() {
         </Button>{' '}
       </Action>
       {registrations.length > 0 ? (
-        <List>
-          <thead>
-            <tr>
-              <th> Aluno </th>
-              <th className="center"> Plano </th>
-              <th className="center"> Início </th>
-              <th className="center"> Término </th>
-              <th className="center"> Ativa </th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {registrations.map(registration => (
-              <tr key={registration.id}>
-                <td>{registration.student.name}</td>
-                <td className="center">{registration.plan.title}</td>
-                <td className="center">{registration.formattedStartDate}</td>
-                <td className="center">{registration.formattedEndDate}</td>
-                <td className="center">
-                  {registration.active ? 'Sim' : 'Não'}
-                </td>
-
-                <td className="actions">
-                  <div>
-                    <Link
-                      to={`/registrations/${registration.id}/edit`}
-                      className="blue"
-                    >
-                      {' '}
-                      Editar{' '}
-                    </Link>
-                    <button
-                      type="button"
-                      className="red"
-                      onClick={() => handleDelete(registration.id)}
-                    >
-                      {' '}
-                      Apagar{' '}
-                    </button>
-                  </div>
-                </td>
+        <Container>
+          <List>
+            <thead>
+              <tr>
+                <th> Aluno </th>
+                <th className="center"> Plano </th>
+                <th className="center"> Início </th>
+                <th className="center"> Término </th>
+                <th className="center"> Ativa </th>
+                <th />
               </tr>
-            ))}
-          </tbody>
-        </List>
+            </thead>
+            <tbody>
+              {registrations.map(registration => (
+                <tr key={registration.id}>
+                  <td>{registration.student.name}</td>
+                  <td className="center">{registration.plan.title}</td>
+                  <td className="center">{registration.formattedStartDate}</td>
+                  <td className="center">{registration.formattedEndDate}</td>
+                  <td className="center">
+                    {registration.active ? 'Sim' : 'Não'}
+                  </td>
+
+                  <td className="actions">
+                    <div>
+                      <Link
+                        to={`/registrations/${registration.id}/edit`}
+                        className="blue"
+                      >
+                        {' '}
+                        Editar{' '}
+                      </Link>
+                      <button
+                        type="button"
+                        className="red"
+                        onClick={() => handleDelete(registration.id)}
+                      >
+                        {' '}
+                        Apagar{' '}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </List>
+          <Pagination onChange={p => setPage(p)} current={page} total={25} />
+        </Container>
       ) : (
         !loading && <p> Sem matrículas no momento </p>
       )}
