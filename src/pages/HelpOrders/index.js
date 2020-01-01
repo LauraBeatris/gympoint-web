@@ -75,7 +75,7 @@ export default function HelpOrdersList() {
         </Helmet>
         <Action title="Pedidos de auxílio" />
         <Container>
-          {loading && <p> Carregando </p>}
+          {loading && <p> Carregando... </p>}
           {!loading && helpOrders.length > 0 ? (
             <List>
               <thead>

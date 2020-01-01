@@ -142,7 +142,7 @@ export default function StudentsEdit({ match }) {
             </div>
           </FormContainer>
         ) : (
-          <p> Carregando estudante... </p>
+          !loading && <p> Carregando estudante... </p>
         )}
       </StyledForm>
     </Container>
