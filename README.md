@@ -57,7 +57,7 @@
   // 2 - Installing the dependencies
   yarn install
   
-  // 3 - Run de apllication (Be sure to have the API running locally)
+  // 3 - Run the apllication (Be sure to have the API running locally)
   yarn start
   
 ```
