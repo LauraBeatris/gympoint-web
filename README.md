@@ -43,7 +43,7 @@
   Future features: 
   <br>
     - Trainings made by the Personal Trainer
-    - Students can access some datas that show how they've been improving in their trainings
+    - Students can access graphics that show how they've been improving in their trainings
  
  To see the **api**, click here: [Gympoint Rest API](https://github.com/LauraBeatris/gympoint-api)
  <br>
