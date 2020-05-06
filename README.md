@@ -47,7 +47,7 @@
  
  To see the **api**, click here: [Gympoint Rest API](https://github.com/LauraBeatris/gympoint-api)
  <br>
-  To see the **user interface**, click here to take a look in the web aplicattion: [Gympoint Mobile](https://github.com/LauraBeatris/gympoint-mobile)
+  To see the **user interface**, click here to take a look in the web aplication: [Gympoint Mobile](https://github.com/LauraBeatris/gympoint-mobile)
 
 ## :runner: Installation 
 
