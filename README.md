@@ -96,7 +96,7 @@ Check out the [contributing](https://github.com/LauraBeatris/gympoint-web/blob/m
 
 # :closed_book: License
 
-Released in 2020.
+Released in 2019.
 This project is under the [MIT license](https://github.com/LauraBeatris/gympoint-web/master/LICENSE).
 
 Made with love by [Laura Beatris](https://github.com/LauraBeatris) 💜🚀
