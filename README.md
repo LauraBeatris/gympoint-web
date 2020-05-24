@@ -84,7 +84,7 @@ Run the following command in order to start the application in a development env
 
 **Question:** What are the tecnologies used in this project?
 
-**Answer:** The tecnologies used in this project are [React](https://nodejs.org/en/) + [Styled Components](https://styled-components.com/) to handle scoped CSS.
+**Answer:** The tecnologies used in this project are [React](https://pt-br.reactjs.org/) + [Styled Components](https://styled-components.com/) to handle scoped CSS.
 
 # :bug: Issues
 
