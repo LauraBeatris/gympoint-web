@@ -70,7 +70,7 @@ After copying the examples, make sure to fill the variables with new values.
 
 **Setup the API**
 
-The interface needs to interact with the server to get the list of transactions and execute mutations.
+The interface needs to interact with the server to get all the data related to students, enrollments, plans and also execute mutations.
 
 Make sure to go to the [Gympoint Rest API](https://github.com/LauraBeatris/gympoint-api) repository and follow the instructions in order to get it running in your machine.
 
