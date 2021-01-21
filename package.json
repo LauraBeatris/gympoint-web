@@ -13,7 +13,7 @@
     "date-fns": "^2.8.1",
     "glamor": "^2.20.40",
     "history": "^4.10.1",
-    "immer": "^5.1.0",
+    "immer": "^8.0.1",
     "polished": "^3.4.2",
     "prop-types": "^15.7.2",
     "rc-pagination": "^1.20.12",
